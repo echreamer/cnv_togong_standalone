@@ -3,7 +3,6 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 
-
 # 위젯
 class CNV_DockWidget(QDockWidget):
     def __init__(self, title, parent=None):
@@ -15,14 +14,16 @@ class CNV_DockWidget(QDockWidget):
         title_bar = QLabel(self)
         title_bar.setText(self.windowTitle())
         title_bar.setAlignment(Qt.AlignCenter)
-
+        title_bar.setStyleSheet("background-color: #2A384C; color: #ffffff; border: 1px solid #2A384C; border-radius: 3px; min-height: 30px; max-height: 30px;")
+        
+        
         # QFont 객체 생성 및 스타일 설정
         font = QFont()
-        font.setBold(True)       # 굵게 설정            
-        font.setFamily('맑은고딕')  # 원하는 폰트 패밀리로 변경
-        font.setPointSize(10)  # 20은 크기 조절을 위한 임의의 비율 상수
-        self.setFont(font)
-        title_bar.setStyleSheet("background-color: #2A384C; color: #ffffff; border: 1px solid #2A384C; border-radius: 3px; min-height: 30px; max-height: 30;")
+        font.setBold(False)
+        font.setFamily('맑은고딕')
+        font.setPointSize(10)
+        title_bar.setFont(font)
+        
 
         # Set the created label as the title bar widget
         self.setTitleBarWidget(title_bar)
@@ -65,13 +66,15 @@ class CNV_ScrollArea(QScrollArea):
 # 툴바 ---------------------------------------------------------------------------------------------------------------------
 
 class CNV_ToolBar(QToolBar):
+    
+    
+    
     def __init__(self, title, parent=None):
         super().__init__(title, parent)
         self.setStyleSheet("""
             QToolBar {
                 border: 1px solid #EAF1FD;
                 background-color: #EAF1FD;
-                margin-bottom: 10px; /* 툴바 아래 마진 설정 */
                 spacing: 5px;
             }
             QToolButton {
@@ -90,11 +93,10 @@ class CNV_ToolBar(QToolBar):
         font = QFont()
         font.setBold(False)       # 굵게 설정            
         font.setFamily('맑은고딕')  # 원하는 폰트 패밀리로 변경
-        font.setPointSize(10)  # 20은 크기 조절을 위한 임의의 비율 상수
+        font.setPointSize(20)
         self.setFont(font)
 
-
-        
+        self.setFixedHeight(40)        
         
 # 체크박스 ---------------------------------------------------------------------------------------------------------------------
 
@@ -159,6 +161,7 @@ class CNV_GroupBox(QGroupBox):
                 background-color: #EAF1FD;
             }
         """)
+        
         
 # 버튼 ----------------------------------------------------------------------------------------------------------------------
       

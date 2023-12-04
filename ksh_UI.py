@@ -6,13 +6,18 @@ from ksh_layer_selection import *
 from ksh_report_result import *
 from ksh_height_setting import *
 from ksh_information import *
+from ksh_style import *
+
 
 from IFCListingWidget import *
 import cnv_methods as cnv
 
+
 from os import environ
 
-##_
+
+
+
 class MainWindow(QMainWindow):
 
     #해상도별 글자크기 강제 고정
@@ -31,16 +36,16 @@ class MainWindow(QMainWindow):
         
         
         self.view_layer_selection = ksh_layer_selection() #레이어 지정
-        self.view_layer_selection.setMinimumWidth(350)
+        self.view_layer_selection.setMinimumWidth(150)
 
         self.ksh_report_result = ksh_report_result() #보링점
-        self.ksh_report_result.setMinimumWidth(350)
+        self.ksh_report_result.setMinimumWidth(150)
 
         self.ksh_height_setting = ksh_height_setting() #높이 설정
-        self.ksh_height_setting.setMinimumWidth(350)
+        self.ksh_height_setting.setMinimumWidth(150)
 
         self.ksh_information = ksh_information() #부재 정보 입력
-        self.ksh_information.setMinimumWidth(350)
+        self.ksh_information.setMinimumWidth(150)
 
         # 위젯 배치------------------------------------------------------------------------------------
 
@@ -73,17 +78,27 @@ class MainWindow(QMainWindow):
         self.addToolBar(toolbar)
         
         # 메뉴바
-        #menu_bar = self.menuBar()
-        #file_menu = QMenu("&File", self)
-        #menu_bar.addMenu(file_menu)
+        # menu_bar = self.menuBar()
+        # file_menu = QMenu("&File", self)
+        # menu_bar.addMenu(file_menu)
 
-        # 프로젝트 내보내기 --------------------------------------------------------------------------
-        action_save = QAction("프로젝트 내보내기", self)
-        action_save.triggered.connect(self.action_save_click)
-        toolbar.addAction(action_save)        
+        # 프로젝트 실행 --------------------------------------------------------------------------
+        # action_save = QAction("프로젝트 실행", self)
+        # action_save.triggered.connect(self.action_save_click)
+        # toolbar.addAction(action_save)        
         
         
         # 체크박스(위젯가시성) -----------------------------------------------------------------------
+        
+        # 공간 확보
+        spacer_widget = QWidget()
+        spacer_widget.setFixedWidth(10)  # 너비 조절을 통해 간격 조정
+        spacer_widget.setStyleSheet("background-color: #EAF1FD;")      
+        toolbar.addWidget(spacer_widget)        
+        
+        #실행 버튼 
+        action_btn = CNV_Button('프로젝트 실행')
+        toolbar.addWidget(action_btn)
         
         # 공간 확보
         spacer_widget = QWidget()
@@ -112,7 +127,6 @@ class MainWindow(QMainWindow):
         # 공간 확보
         spacer_widget = QWidget()
         spacer_widget.setFixedWidth(20)  # 너비 조절을 통해 간격 조정
-        
         spacer_widget.setStyleSheet("background-color: #EAF1FD; margin-bottom: 10px;")      
         toolbar.addWidget(spacer_widget)        
         
@@ -162,11 +176,15 @@ class MainWindow(QMainWindow):
         
     # 프로젝트 저장 이벤트-------------------------------------------------------------------------------
     
-    def action_save_click(self):
-        print(self.project_folder_path + "constr_item_list.json")
-        cnv.save_json(self.constr_item_list, self.project_folder_path + "constr_item_list.json")
-        cnv.save_json(self.obj_constr_connect_list, self.project_folder_path + "obj_constr_connect_list.json")
-        cnv.save_json(self.obj_constr_quantity_list, self.project_folder_path + "obj_constr_quantity_list.json")
+    # def action_save_click(self):
+    #     print(self.project_folder_path + "constr_item_list.json")
+    #     cnv.save_json(self.constr_item_list, self.project_folder_path + "constr_item_list.json")
+    #     cnv.save_json(self.obj_constr_connect_list, self.project_folder_path + "obj_constr_connect_list.json")
+    #     cnv.save_json(self.obj_constr_quantity_list, self.project_folder_path + "obj_constr_quantity_list.json")
+        
+        
+        
+        
         
 def main():
     app = 0
