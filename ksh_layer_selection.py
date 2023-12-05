@@ -13,6 +13,7 @@ except Exception:
 import ifcopenshell
 from IFCCustomDelegate import *
 from ksh_style import *
+import pandas as pd
 
 
 class ksh_layer_selection(QWidget):
@@ -66,13 +67,22 @@ class ksh_layer_selection(QWidget):
         
         # 테이블 위젯 생성
         table = CNV_TableWidget()
-        table.setRowCount(8)
+        table.setRowCount(2)
         table.setColumnCount(2)
 
         table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
         table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
-
-        # 첫 번째 열에 콤보박스 추가
+        
+        # 고정값으로 첫 번째 열의 텍스트 설정
+        table.setItem(0, 0, QTableWidgetItem("지형 레벨 포인트"))
+        table.setItem(1, 0, QTableWidgetItem("대지경계선"))            
+        
+        # 첫 번째 열의 아이템 수정 불가능하게 설정
+        for i in range(table.rowCount()):
+            item = table.item(i, 0)
+            item.setFlags(item.flags() ^ Qt.ItemIsEditable)         
+            
+        # 두 번째 열에 콤보박스 추가
         for i in range(table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(["Option 1", "Option 2", "Option 3"])
@@ -91,10 +101,10 @@ class ksh_layer_selection(QWidget):
         tab1_layout.addWidget(table)
         tab1.setLayout(tab1_layout)
 
-        vbox.addWidget(tabs)
 
-        
+        vbox.addWidget(tabs)
         return groupbox
+    
     
     #그룹박스 - 부재 ------------------------------------------------------------------ 
     def Group2(self):

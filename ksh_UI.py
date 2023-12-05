@@ -7,14 +7,84 @@ from ksh_report_result import *
 from ksh_height_setting import *
 from ksh_information import *
 from ksh_style import *
-
-
 from IFCListingWidget import *
 import cnv_methods as cnv
-
-
 from os import environ
 
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
+from PyQt5.QtCore import Qt
+import socket
+import sys
+import json
+
+
+##메소드---------------------------------------------------------------------------------------------------------------------
+def test():
+    try:
+        data = {
+                    "type": "test",
+                    "message": [[1,1,1],[2,2,2],[3,3,3]]
+                }
+
+        # JSON으로 직렬화
+        json_data = json.dumps(data)
+
+        # 소켓 설정 및 연결
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect(('localhost', 9789))
+
+        # JSON 데이터 전송
+        client_socket.sendall(json_data.encode('utf-8'))
+        client_socket.close()
+
+    except Exception as e:
+        print(f"Error:{e}")
+        
+#메소드_프로젝트 실행
+def project_execution():
+    try:
+        data = {
+                    "type": "project_execution",
+                    "message": [[1,1,1],[2,2,2],[3,3,3]]
+                }
+
+        # JSON으로 직렬화
+        json_data = json.dumps(data)
+
+        # 소켓 설정 및 연결
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect(('localhost', 9789))
+
+        # JSON 데이터 전송
+        client_socket.sendall(json_data.encode('utf-8'))
+        client_socket.close()
+
+    except Exception as e:
+        print(f"Error:{e}")
+
+#메소드_1_현황_지형 레벨 포인트
+def layer_point_data():
+    try:
+        data = {
+                    "type": "layer_point_data",
+                    "message": [[0,0,0],[2,2,2],[3,3,3]]
+                }
+
+        # JSON으로 직렬화
+        json_data = json.dumps(data)
+
+        # 소켓 설정 및 연결
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect(('localhost', 9789))
+
+        # JSON 데이터 전송
+        client_socket.sendall(json_data.encode('utf-8'))
+        client_socket.close()
+
+    except Exception as e:
+        print(f"Error:{e}")
+        
+##메소드--
 
 
 
@@ -92,12 +162,13 @@ class MainWindow(QMainWindow):
         
         # 공간 확보
         spacer_widget = QWidget()
-        spacer_widget.setFixedWidth(10)  # 너비 조절을 통해 간격 조정
+        spacer_widget.setFixedWidth(5)  # 너비 조절을 통해 간격 조정
         spacer_widget.setStyleSheet("background-color: #EAF1FD;")      
         toolbar.addWidget(spacer_widget)        
         
         #실행 버튼 
         action_btn = CNV_Button('프로젝트 실행')
+        action_btn.clicked.connect(project_execution)
         toolbar.addWidget(action_btn)
         
         # 공간 확보
