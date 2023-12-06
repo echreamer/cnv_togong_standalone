@@ -65,36 +65,18 @@ class ksh_layer_selection(QWidget):
         tabs.addTab(QWidget(), '터파기')  # 빈 탭 추가
         
         # 테이블 위젯 생성
-<<<<<<< HEAD
         self.table = CNV_TableWidget()
         # self.table.setRowCount(8)
         self.table.setColumnCount(2)
-=======
-        table = CNV_TableWidget()
-        table.setRowCount(2)
-        table.setColumnCount(2)
->>>>>>> a89c00a9c0579b94fb65d8dffc7f4b6ec86c0258
 
         self.table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
         self.table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
 
-<<<<<<< HEAD
         # # 두 번째 열에 콤보박스 추가 <- ksh_UI.py 파일에서 코드 생성
         # for i in range(self.table.rowCount()):
         #     combo = CNV_ComboBox()
         #     combo.addItems(["Option 1", "Option 2", "Option 3"])
         #     self.table.setCellWidget(i, 1, combo)
-=======
-        # 고정값으로 첫 번째 열의 텍스트 설정
-        table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
-        table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
-        
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(table.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["Option 1", "Option 2", "Option 3"])
-            table.setCellWidget(i, 1, combo)
->>>>>>> a89c00a9c0579b94fb65d8dffc7f4b6ec86c0258
             
         # 행의 헤더 숨기기
         header = self.table.verticalHeader()
