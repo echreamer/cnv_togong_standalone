@@ -20,5 +20,6 @@ def load_dxf_layers(dxf_file_path):
 example_dxf_path = r"C:\C00-100.dxf"
 layer_list = load_dxf_layers(example_dxf_path)
 print(layer_list)
+print('test')
 
 
