@@ -66,12 +66,16 @@ class ksh_layer_selection(QWidget):
         
         # 테이블 위젯 생성
         table = CNV_TableWidget()
-        table.setRowCount(8)
+        table.setRowCount(2)
         table.setColumnCount(2)
 
         table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
         table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
 
+        # 고정값으로 첫 번째 열의 텍스트 설정
+        table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
+        table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
+        
         # 첫 번째 열에 콤보박스 추가
         for i in range(table.rowCount()):
             combo = CNV_ComboBox()
@@ -93,7 +97,10 @@ class ksh_layer_selection(QWidget):
 
         vbox.addWidget(tabs)
 
-        
+        # 버튼 생성
+        add_btn = CNV_Button('지형 작성')
+        vbox.addWidget(add_btn)     
+           
         return groupbox
     
     #그룹박스 - 부재 ------------------------------------------------------------------ 
