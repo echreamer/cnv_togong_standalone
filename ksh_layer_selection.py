@@ -65,30 +65,30 @@ class ksh_layer_selection(QWidget):
         tabs.addTab(QWidget(), '터파기')  # 빈 탭 추가
         
         # 테이블 위젯 생성
-        table = CNV_TableWidget()
-        table.setRowCount(8)
-        table.setColumnCount(2)
+        self.table = CNV_TableWidget()
+        # self.table.setRowCount(8)
+        self.table.setColumnCount(2)
 
-        table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
-        table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
+        self.table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
+        self.table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
 
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(table.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["Option 1", "Option 2", "Option 3"])
-            table.setCellWidget(i, 1, combo)
+        # # 두 번째 열에 콤보박스 추가 <- ksh_UI.py 파일에서 코드 생성
+        # for i in range(self.table.rowCount()):
+        #     combo = CNV_ComboBox()
+        #     combo.addItems(["Option 1", "Option 2", "Option 3"])
+        #     self.table.setCellWidget(i, 1, combo)
             
         # 행의 헤더 숨기기
-        header = table.verticalHeader()
+        header = self.table.verticalHeader()
         header.hide()       
 
         # 테이블 열 너비 조정
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
 
         # 탭에 테이블 추가
         tab1 = tabs.widget(0)
         tab1_layout = QVBoxLayout()
-        tab1_layout.addWidget(table)
+        tab1_layout.addWidget(self.table)
         tab1.setLayout(tab1_layout)
 
         vbox.addWidget(tabs)

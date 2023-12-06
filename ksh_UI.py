@@ -14,6 +14,21 @@ from os import environ
 
 import ezdxf
 
+from ksh_style import *
+import sys
+import os.path
+import cnv_methods as cnv
+try:
+    from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import *
+except Exception:
+    from PySide2.QtGui import *
+    from PySide2.QtCore import *
+    from PySide2.QtWidgets import *
+
+from IFCCustomDelegate import *
+from ksh_style import *
 ##_사용함수
 
 
@@ -189,6 +204,8 @@ class MainWindow(QMainWindow):
         doc = ezdxf.readfile(filename)
         self.dxf_1 = doc
         self.dxf_1_layers=self.load_dxf_layers(doc)
+        self.input_dxf_layer_topo_widget(self.dxf_1_layers)#콤보박스에 리스트업
+
         print(doc)
         print(self.dxf_1_layers)
 
@@ -217,7 +234,26 @@ class MainWindow(QMainWindow):
 
             return []
 
+    # 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
+    def input_dxf_layer_topo_widget(self,layerList):
+        print(layerList)
+        rowCount = 2
+        self.view_layer_selection.table.setRowCount(rowCount)
+        self.view_layer_selection.table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_layer_selection.table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
+        for i in range(self.view_layer_selection.table.rowCount()):
+            combo = CNV_ComboBox()
+            combo.addItems(layerList)
+            self.view_layer_selection.table.setCellWidget(i, 1, combo)
+        
+        #첫 번째 열의 아이템 수정 불가능하게 설정
+        for i in range(self.view_layer_selection.table.rowCount()):
+            item = self.view_layer_selection.table.item(i, 0)
+            item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+
+
+    # ---
 
 
     #--------
