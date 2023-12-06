@@ -94,8 +94,8 @@ class ksh_layer_selection(QWidget):
         vbox.addWidget(tabs)
 
         # 버튼 생성
-        add_btn = CNV_Button('지형 작성')
-        tab1_layout.addWidget(add_btn)
+        self.add_btn = CNV_Button('지형 작성')
+        tab1_layout.addWidget(self.add_btn)
            
         return groupbox
     

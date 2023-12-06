@@ -29,6 +29,8 @@ except Exception:
 
 from IFCCustomDelegate import *
 from ksh_style import *
+
+from PyQt5.QtWidgets import QApplication, QComboBox, QPushButton, QVBoxLayout, QWidget
 ##_사용함수
 
 
@@ -36,12 +38,6 @@ from ksh_style import *
 
 
 ######
-
-
-
-
-
-
 
 
 class MainWindow(QMainWindow):
@@ -107,6 +103,10 @@ class MainWindow(QMainWindow):
 
 
         self.view_layer_selection.btn.clicked.connect(self.action_dxf_open_click)
+
+
+        #지형작성 액션
+        self.view_layer_selection.add_btn.clicked.connect(self.action_generate_topo)
 
 
 
@@ -233,6 +233,7 @@ class MainWindow(QMainWindow):
             print(f"Invalid or corrupted DXF file")
 
             return []
+    #---------------------------------------------------------------
 
     # 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_topo_widget(self,layerList):
@@ -254,7 +255,11 @@ class MainWindow(QMainWindow):
 
 
     # ---
-
+    # 지형 작성 액션 메소드
+    def action_generate_topo(self):
+        print(self.view_layer_selection.table.cellWidget(0,1).currentText())
+        print()
+        
 
     #--------
 
