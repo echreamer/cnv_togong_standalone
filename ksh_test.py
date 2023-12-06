@@ -14,7 +14,7 @@ class MergedTableWidget(QWidget):
         tableWidget.setRowCount(8)
         tableWidget.setColumnCount(3)
         
-        # 첫 번째 열에 콤보박스 추가
+        # 첫 번째 열에 콤보박스 추가--
         for i in range(tableWidget.rowCount()):
             combo = QComboBox()
             combo.addItems(["Option 1", "Option 2", "Option 3"])
