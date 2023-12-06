@@ -254,11 +254,17 @@ class MainWindow(QMainWindow):
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
 
 
-    # ---
+    # ---dd
     # 지형 작성 액션 메소드
     def action_generate_topo(self):
-        print(self.view_layer_selection.table.cellWidget(0,1).currentText())
-        print()
+        
+        # 현재 선택된 레벨포인트용 레이어
+        current_level_layer = self.view_layer_selection.table.cellWidget(0,1).currentText()
+        # current_level_layer의 이름을 가진 dxf파일 내의 레이어의 좌표를 가져오고 그것을 담을 리스트에 저장
+        # 리스트에 저장할 때 현재 담겨있는 리스트의 값을 확인해서 만약 동일한 값이 있다면 패스 
+        # 만약 텍스트 값이 필요할 경우 동시에 그 레이어의 객체와 가장 가까운 텍스트의 값을 가져오는데 위에서 패스일 경우는 제외
+        #
+
         
 
     #--------
