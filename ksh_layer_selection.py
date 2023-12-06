@@ -99,7 +99,7 @@ class ksh_layer_selection(QWidget):
 
         # 버튼 생성
         add_btn = CNV_Button('지형 작성')
-        vbox.addWidget(add_btn)     
+        tab1_layout.addWidget(add_btn)
            
         return groupbox
     
