@@ -12,7 +12,23 @@ import cnv_methods as cnv
 
 from os import environ
 
-##_
+import ezdxf
+
+##_사용함수
+
+
+
+
+
+######
+
+
+
+
+
+
+
+
 class MainWindow(QMainWindow):
 
     #해상도별 글자크기 강제 고정
@@ -25,6 +41,13 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+
+        # 전역변수 설정
+        self.dxf_1 = None #현황도 dxf파일
+        self.dxf_1_layers = None #현황도 dxf파일의 레이어 리스트
+
+
+
         self.setStyleSheet("background-color: #ffffff;")        
         
         # 위젯 생성-------------------------------------------------------------------------------------
@@ -65,6 +88,14 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.BottomDockWidgetArea, self.dock5)
         
         
+        #dxf파일 열기 액션
+
+
+        self.view_layer_selection.btn.clicked.connect(self.action_dxf_open_click)
+
+
+
+
         # 프로젝트 저장 탭(툴바 생성) -------------------------------------------------------------------------------
         self.setUnifiedTitleAndToolBarOnMac(True)
         toolbar = CNV_ToolBar("My main toolbar")
@@ -138,8 +169,70 @@ class MainWindow(QMainWindow):
         #메뉴바
         #file_menu.addAction(action_save)        
         
-        
-        
+    # dxf파일 불러오기 버튼들 눌렀을 때 실행되는 함수
+    def action_dxf_open_click(self):
+
+        self.filenames, self.filter_string = QFileDialog.getOpenFileNames(self, caption="Open DXF File",
+                                                                filter="DXF files (*.dxf)")
+
+        for file in self.filenames:
+            if os.path.isfile(file):
+                try:
+                    self.load_dxf_file(file)
+                except:
+                    pass
+
+
+    #-----------------------------------------------------------
+    # dxf파일을 로드하는 함수
+    def load_dxf_file(self, filename):
+        doc = ezdxf.readfile(filename)
+        self.dxf_1 = doc
+        self.dxf_1_layers=self.load_dxf_layers(doc)
+        print(doc)
+        print(self.dxf_1_layers)
+
+        return doc
+
+    #---------------------------------------------------------------
+    # dxf 파일의 레이어 리스트 추출 메소드
+
+    def load_dxf_layers(self, doc):
+
+        try:
+
+            layers = [layer.dxf.name for layer in doc.layers]
+
+            return layers
+
+        except IOError:
+
+            print(f"Cannot open file")
+
+            return []
+
+        except ezdxf.DXFStructureError:
+
+            print(f"Invalid or corrupted DXF file")
+
+            return []
+
+
+
+
+    #--------
+
+
+
+
+
+
+
+
+
+
+
+
     # 체크박스 상태 변화 함수 정의--------------------------------------------------------------
             
     def toggle_2(self, state):
@@ -167,7 +260,17 @@ class MainWindow(QMainWindow):
         cnv.save_json(self.constr_item_list, self.project_folder_path + "constr_item_list.json")
         cnv.save_json(self.obj_constr_connect_list, self.project_folder_path + "obj_constr_connect_list.json")
         cnv.save_json(self.obj_constr_quantity_list, self.project_folder_path + "obj_constr_quantity_list.json")
+    
+
         
+
+
+
+
+
+
+
+
 def main():
     app = 0
     if QApplication.instance():

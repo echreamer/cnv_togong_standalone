@@ -39,8 +39,8 @@ class ksh_layer_selection(QWidget):
         vbox.addSpacerItem(spacer)   
 
         # 버튼 생성
-        btn = CNV_Button('파일 불러오기')
-        vbox.addWidget(btn)
+        self.btn = CNV_Button('파일 불러오기')
+        vbox.addWidget(self.btn)
         self.show()    
 
         # 그룹박스 생성
