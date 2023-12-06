@@ -37,3 +37,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     merged_table = MergedTableWidget()
     sys.exit(app.exec_())
+    
+print('test')
