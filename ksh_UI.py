@@ -54,10 +54,12 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # 전역변수 설정
-        self.dxf_1 = None #현황도 dxf파일
-        self.dxf_1_layers = None #현황도 dxf파일의 레이어 리스트
-        self.dxf_1_xyzs = None #현황도 xyz리스트
-
+        self.dxf_1 = None #현황측량도 dxf파일
+        self.dxf_1_layers = None 
+        self.dxf_2 = None #터파기 dxf파일
+        self.dxf_2_layers = None 
+        self.dxf_3 = None #굴착계획평면도 dxf파일
+        self.dxf_3_layers = None 
 
         self.setStyleSheet("background-color: #ffffff;")        
         
@@ -102,9 +104,11 @@ class MainWindow(QMainWindow):
         #dxf파일 열기 액션
 
 
-        self.view_layer_selection.btn.clicked.connect(self.action_dxf_open_click)
-
-
+        self.view_layer_selection.btn1.clicked.connect(self.action_dxf_open_click_1)
+        self.view_layer_selection.btn2.clicked.connect(self.action_dxf_open_click_2)
+        self.view_layer_selection.btn3.clicked.connect(self.action_dxf_open_click_3)
+        
+        
         #지형작성 액션
         self.view_layer_selection.add_btn.clicked.connect(self.action_generate_topo)
 
@@ -182,10 +186,11 @@ class MainWindow(QMainWindow):
         
         
         #메뉴바
-        #file_menu.addAction(action_save)        
-        
-    # dxf파일 불러오기 버튼들 눌렀을 때 실행되는 함수
-    def action_dxf_open_click(self):
+        #file_menu.addAction(action_save)     
+    #-----------------------------------------------------------
+    #-----------------------------------------------------------
+    # '현황측량도'파일 불러오기 버튼들 눌렀을 때 실행되는 함수
+    def action_dxf_open_click_1(self):
 
         self.filenames, self.filter_string = QFileDialog.getOpenFileNames(self, caption="Open DXF File",
                                                                 filter="DXF files (*.dxf)")
@@ -193,25 +198,85 @@ class MainWindow(QMainWindow):
         for file in self.filenames:
             if os.path.isfile(file):
                 try:
-                    self.load_dxf_file(file)
+                    self.load_dxf_file_1(file)
                 except:
                     pass
-
-
+        
     #-----------------------------------------------------------
-    # dxf파일을 로드하는 함수
-    def load_dxf_file(self, filename):
-        doc = ezdxf.readfile(filename)
-        self.dxf_1 = doc
-        self.dxf_1_layers=self.load_dxf_layers(doc)
+    # '현황측량도'파일을 로드하는 함수
+    def load_dxf_file_1(self, filename):
+        doc_1 = ezdxf.readfile(filename)
+        self.dxf_1 = doc_1
+        self.dxf_1_layers=self.load_dxf_layers(doc_1)
         self.input_dxf_layer_topo_widget(self.dxf_1_layers)#콤보박스에 리스트업
 
-        print(doc)
+        self.view_layer_selection.file_path_label_1.setText(f"파일 경로: {filename}")
+        print(doc_1)
         print(self.dxf_1_layers)
+        
+        return doc_1
+    #-----------------------------------------------------------
+    # '터파기'파일 불러오기 버튼들 눌렀을 때 실행되는 함수
+    def action_dxf_open_click_2(self):
 
-        return doc
+        self.filenames, self.filter_string = QFileDialog.getOpenFileNames(self, caption="Open DXF File",
+                                                                filter="DXF files (*.dxf)")
 
-    #---------------------------------------------------------------
+        for file in self.filenames:
+            if os.path.isfile(file):
+                try:
+                    self.load_dxf_file_2(file)
+                except:
+                    pass
+        
+    #-----------------------------------------------------------
+    # '터파기'파일을 로드하는 함수
+    def load_dxf_file_2(self, filename):
+        doc_2 = ezdxf.readfile(filename)
+        self.dxf_2 = doc_2
+        self.dxf_2_layers=self.load_dxf_layers(doc_2)
+        self.input_dxf_layer_digging_widget(self.dxf_2_layers)#콤보박스에 리스트업
+
+        self.view_layer_selection.file_path_label_2.setText(f"파일 경로: {filename}")
+        print(doc_2)
+        print(self.dxf_2_layers)
+        
+        return doc_2    
+    #-----------------------------------------------------------
+    # '굴착계획평면도'파일 불러오기 버튼들 눌렀을 때 실행되는 함수
+    def action_dxf_open_click_3(self):
+
+        self.filenames, self.filter_string = QFileDialog.getOpenFileNames(self, caption="Open DXF File",
+                                                                filter="DXF files (*.dxf)")
+
+        for file in self.filenames:
+            if os.path.isfile(file):
+                try:
+                    self.load_dxf_file_3(file)
+                except:
+                    pass
+        
+    #-----------------------------------------------------------
+    # '굴착계획평면도'파일을 로드하는 함수
+    def load_dxf_file_3(self, filename):
+        doc_3 = ezdxf.readfile(filename)
+        self.dxf_3 = doc_3
+        self.dxf_3_layers=self.load_dxf_layers(doc_3)
+        self.input_dxf_layer_pile_widget(self.dxf_3_layers)#콤보박스에 리스트업
+        self.input_dxf_layer_mudblock_widget(self.dxf_3_layers)#콤보박스에 리스트업
+        self.input_dxf_layer_bracing_widget(self.dxf_3_layers)#콤보박스에 리스트업
+        self.input_dxf_layer_board_widget(self.dxf_3_layers)#콤보박스에 리스트업
+        
+        
+        
+        self.view_layer_selection.file_path_label_3.setText(f"파일 경로: {filename}")
+        print(doc_3)
+        print(self.dxf_3_layers)
+        
+        return doc_3    
+    
+    #-----------------------------------------------------------
+    #-----------------------------------------------------------
     # dxf 파일의 레이어 리스트 추출 메소드
 
     def load_dxf_layers(self, doc):
@@ -219,7 +284,7 @@ class MainWindow(QMainWindow):
         try:
 
             layers = [layer.dxf.name for layer in doc.layers]
-
+            layers.sort()  #레이어 리스트를 텍스트의 오름차순으로 정렬          
             return layers
 
         except IOError:
@@ -234,26 +299,116 @@ class MainWindow(QMainWindow):
 
             return []
     #---------------------------------------------------------------
-
-    # 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
+    #---------------------------------------------------------------
+    # '현황측량도'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_topo_widget(self,layerList):
         print(layerList)
         rowCount = 2
-        self.view_layer_selection.table.setRowCount(rowCount)
-        self.view_layer_selection.table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_layer_selection.table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_layer_selection.topo_table.setRowCount(rowCount)
+        self.view_layer_selection.topo_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_layer_selection.topo_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
-        for i in range(self.view_layer_selection.table.rowCount()):
+        for i in range(self.view_layer_selection.topo_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_layer_selection.table.setCellWidget(i, 1, combo)
+            self.view_layer_selection.topo_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_layer_selection.table.rowCount()):
-            item = self.view_layer_selection.table.item(i, 0)
+        for i in range(self.view_layer_selection.topo_table.rowCount()):
+            item = self.view_layer_selection.topo_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
 
+    # '터파기'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
+    def input_dxf_layer_digging_widget(self,layerList):
+        print(layerList)
+        rowCount = 2
+        self.view_layer_selection.digging_table.setRowCount(rowCount)
+        self.view_layer_selection.digging_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_layer_selection.digging_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
+        for i in range(self.view_layer_selection.digging_table.rowCount()):
+            combo = CNV_ComboBox()
+            combo.addItems(layerList)
+            self.view_layer_selection.digging_table.setCellWidget(i, 1, combo)
+        
+        #첫 번째 열의 아이템 수정 불가능하게 설정
+        for i in range(self.view_layer_selection.digging_table.rowCount()):
+            item = self.view_layer_selection.digging_table.item(i, 0)
+            item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+            
+    # '파일'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
+    def input_dxf_layer_pile_widget(self,layerList):
+        print(layerList)
+        rowCount = 2
+        self.view_layer_selection.pile_table.setRowCount(rowCount)
+        self.view_layer_selection.pile_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_layer_selection.pile_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+
+        for i in range(self.view_layer_selection.pile_table.rowCount()):
+            combo = CNV_ComboBox()
+            combo.addItems(layerList)
+            self.view_layer_selection.pile_table.setCellWidget(i, 1, combo)
+        
+        #첫 번째 열의 아이템 수정 불가능하게 설정
+        for i in range(self.view_layer_selection.pile_table.rowCount()):
+            item = self.view_layer_selection.pile_table.item(i, 0)
+            item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+            
+    # '흙막이'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
+    def input_dxf_layer_mudblock_widget(self,layerList):
+        print(layerList)
+        rowCount = 2
+        self.view_layer_selection.mudblock_table.setRowCount(rowCount)
+        self.view_layer_selection.mudblock_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_layer_selection.mudblock_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+
+        for i in range(self.view_layer_selection.mudblock_table.rowCount()):
+            combo = CNV_ComboBox()
+            combo.addItems(layerList)
+            self.view_layer_selection.mudblock_table.setCellWidget(i, 1, combo)
+        
+        #첫 번째 열의 아이템 수정 불가능하게 설정
+        for i in range(self.view_layer_selection.mudblock_table.rowCount()):
+            item = self.view_layer_selection.mudblock_table.item(i, 0)
+            item.setFlags(item.flags() ^ Qt.ItemIsEditable)            
+            
+    # '버팀대'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
+    def input_dxf_layer_bracing_widget(self,layerList):
+        print(layerList)
+        rowCount = 2
+        self.view_layer_selection.bracing_table.setRowCount(rowCount)
+        self.view_layer_selection.bracing_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_layer_selection.bracing_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+
+        for i in range(self.view_layer_selection.bracing_table.rowCount()):
+            combo = CNV_ComboBox()
+            combo.addItems(layerList)
+            self.view_layer_selection.bracing_table.setCellWidget(i, 1, combo)
+        
+        #첫 번째 열의 아이템 수정 불가능하게 설정
+        for i in range(self.view_layer_selection.bracing_table.rowCount()):
+            item = self.view_layer_selection.bracing_table.item(i, 0)
+            item.setFlags(item.flags() ^ Qt.ItemIsEditable)
+            
+    # '복공판'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
+    def input_dxf_layer_board_widget(self,layerList):
+        print(layerList)
+        rowCount = 2
+        self.view_layer_selection.board_table.setRowCount(rowCount)
+        self.view_layer_selection.board_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_layer_selection.board_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+
+        for i in range(self.view_layer_selection.board_table.rowCount()):
+            combo = CNV_ComboBox()
+            combo.addItems(layerList)
+            self.view_layer_selection.board_table.setCellWidget(i, 1, combo)
+        
+        #첫 번째 열의 아이템 수정 불가능하게 설정
+        for i in range(self.view_layer_selection.board_table.rowCount()):
+            item = self.view_layer_selection.board_table.item(i, 0)
+            item.setFlags(item.flags() ^ Qt.ItemIsEditable)            
+    #---------------------------------------------------------------
+    #---------------------------------------------------------------
     # ---dd
     # 지형 작성 액션 메소드
     def action_generate_topo(self):
@@ -261,8 +416,6 @@ class MainWindow(QMainWindow):
         # 현재 선택된 레벨포인트용 레이어
         current_level_layer = self.view_layer_selection.table.cellWidget(0,1).currentText()
         # current_level_layer의 이름을 가진 dxf파일 내의 레이어의 좌표를 가져오고 그것을 담을 리스트에 저장
-            # 리스트에 저장할 때 현재 담겨있는 리스트의 값을 확인해서 만약 동일한 값이 있다면 패스 
-
         # DXF 파일을 읽음
         msp = self.dxf_1.modelspace()
 
@@ -293,8 +446,7 @@ class MainWindow(QMainWindow):
         # 집합을 출력
         print(list(unique_coordinates))
 
-        
-
+        # 리스트에 저장할 때 현재 담겨있는 리스트의 값을 확인해서 만약 동일한 값이 있다면 패스 
         # 만약 텍스트 값이 필요할 경우 동시에 그 레이어의 객체와 가장 가까운 텍스트의 값을 가져오는데 위에서 패스일 경우는 제외
         #
 
