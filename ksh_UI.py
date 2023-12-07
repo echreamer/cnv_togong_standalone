@@ -292,6 +292,7 @@ class MainWindow(QMainWindow):
 
         # 집합을 출력
         print(list(unique_coordinates))
+
         
 
         # 만약 텍스트 값이 필요할 경우 동시에 그 레이어의 객체와 가장 가까운 텍스트의 값을 가져오는데 위에서 패스일 경우는 제외
