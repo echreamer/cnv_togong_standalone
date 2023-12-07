@@ -69,7 +69,6 @@ class ksh_height_setting(QWidget):
         # 버튼 생성
         add_btn = CNV_Button('+')
         add_btn.clicked.connect(self.addRow)
-        
         button_layout.addWidget(add_btn)
         
         delete_btn = CNV_Button('-')
