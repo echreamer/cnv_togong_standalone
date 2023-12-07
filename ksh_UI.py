@@ -261,6 +261,36 @@ class MainWindow(QMainWindow):
         # 현재 선택된 레벨포인트용 레이어
         current_level_layer = self.view_layer_selection.table.cellWidget(0,1).currentText()
         # current_level_layer의 이름을 가진 dxf파일 내의 레이어의 좌표를 가져오고 그것을 담을 리스트에 저장
+        # DXF 파일을 읽음
+        msp = self.dxf_1.modelspace()
+
+        # 중복을 제거하기 위한 집합
+        unique_coordinates = set()
+
+        # 지정된 레이어의 모든 객체를 순회
+        for entity in msp.query(f'*[layer=="{current_level_layer}"]'):
+            if entity.dxftype() == 'LINE':
+                # 선의 시작점과 끝점 좌표 추출
+                start = entity.dxf.start
+                end = entity.dxf.end
+                # 중심점 좌표 계산
+                center = ((start.x + end.x) / 2, (start.y + end.y) / 2, (start.z + end.z) / 2)
+                unique_coordinates.add(center)
+            elif entity.dxftype() == 'POINT':
+            # 점의 좌표 추출
+                point = (entity.dxf.location.x, entity.dxf.location.y, entity.dxf.location.z)
+                unique_coordinates.add(point)
+
+            elif entity.dxftype() == 'INSERT':
+            # 삽입점 좌표 추출
+                insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y, entity.dxf.insert.z)
+                unique_coordinates.add(insertion_point)
+
+            # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
+
+        # 집합을 출력
+        print(list(unique_coordinates))
+
         # 리스트에 저장할 때 현재 담겨있는 리스트의 값을 확인해서 만약 동일한 값이 있다면 패스 
         # 만약 텍스트 값이 필요할 경우 동시에 그 레이어의 객체와 가장 가까운 텍스트의 값을 가져오는데 위에서 패스일 경우는 제외
         #
