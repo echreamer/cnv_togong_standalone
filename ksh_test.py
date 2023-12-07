@@ -1,39 +1,38 @@
+from PyQt5.QtWidgets import QApplication, QComboBox, QPushButton, QTableWidgetItem, QTableWidget, QVBoxLayout, QWidget
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QHeaderView, QComboBox
 
-class MergedTableWidget(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
+def on_button_click():
+    selected_items = []
+    for row in range(table.rowCount()):
+        for col in range(table.columnCount()):
+            item = table.cellWidget(row, col)  # 셀의 위젯(콤보박스) 가져오기
+            if isinstance(item, QComboBox):
+                selected_item = item.currentText()  # 현재 선택된 아이템 가져오기
+                selected_items.append(selected_item)
 
-    def initUI(self):
-        vbox = QVBoxLayout(self)
+    print(f"Selected items: {selected_items}")
 
-        # 테이블 위젯 생성
-        tableWidget = QTableWidget()
-        tableWidget.setRowCount(8)
-        tableWidget.setColumnCount(3)
-        
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(tableWidget.rowCount()):
-            combo = QComboBox()
-            combo.addItems(["Option 1", "Option 2", "Option 3"])
-            tableWidget.setCellWidget(i, 1, combo)
-        
-        # 헤더 아이템 설정
-        tableWidget.horizontalHeader().setVisible(False)
-        tableWidget.verticalHeader().setVisible(False)
-        tableWidget.setSpan(0, 0, tableWidget.rowCount(), 1)  # 첫 번째 열 병합
-        item = QTableWidgetItem("공번")
-        tableWidget.setItem(0, 0, item)
-        tableWidget.resizeColumnsToContents()
-        
-        vbox.addWidget(tableWidget)
-        self.setLayout(vbox)
-        self.setWindowTitle('Merged Table Widget')
-        self.show()
+app = QApplication(sys.argv)
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    merged_table = MergedTableWidget()
-    sys.exit(app.exec_())
+window = QWidget()
+layout = QVBoxLayout()
+
+table = QTableWidget()
+table.setRowCount(2)
+table.setColumnCount(2)
+
+for i in range(table.rowCount()):
+    for j in range(table.columnCount()):
+        combo = QComboBox()
+        combo.addItems(["Option 1", "Option 2", "Option 3"])
+        table.setCellWidget(i, j, combo)
+
+button = QPushButton("Extract Selected Items")
+button.clicked.connect(on_button_click)
+
+layout.addWidget(table)
+layout.addWidget(button)
+window.setLayout(layout)
+window.show()
+
+sys.exit(app.exec_())
