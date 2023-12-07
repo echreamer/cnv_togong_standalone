@@ -36,12 +36,12 @@ class ksh_layer_selection(QWidget):
 
 
         # 그룹박스 생성
-        vbox.addWidget(self.Group3())
         vbox.addWidget(self.Group1())
         vbox.addWidget(self.Group2())
+        vbox.addWidget(self.Group3())
 
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
-    def Group3(self):
+    def Group1(self):
         groupbox = CNV_GroupBox()
         
         vbox = QVBoxLayout()
@@ -78,7 +78,7 @@ class ksh_layer_selection(QWidget):
         return groupbox
     
     #그룹박스 - 지형 --------------------------------------------------------------------------   
-    def Group1(self):
+    def Group2(self):
         groupbox = CNV_GroupBox()
         
         vbox = QVBoxLayout()
@@ -163,7 +163,7 @@ class ksh_layer_selection(QWidget):
         return groupbox
 
     #그룹박스 - 부재 ------------------------------------------------------------------ 
-    def Group2(self):
+    def Group3(self):
         groupbox = CNV_GroupBox()
         
         vbox = QVBoxLayout()

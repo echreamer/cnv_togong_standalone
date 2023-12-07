@@ -284,7 +284,7 @@ class MainWindow(QMainWindow):
         try:
 
             layers = [layer.dxf.name for layer in doc.layers]
-
+            layers.sort()  #레이어 리스트를 텍스트의 오름차순으로 정렬          
             return layers
 
         except IOError:
