@@ -31,6 +31,9 @@ from IFCCustomDelegate import *
 from ksh_style import *
 
 from PyQt5.QtWidgets import QApplication, QComboBox, QPushButton, QVBoxLayout, QWidget
+
+import json
+import socket
 ##_사용함수
 
 
@@ -445,7 +448,33 @@ class MainWindow(QMainWindow):
 
         # 집합을 출력
         print(list(unique_coordinates))
+        try:
+                data = {
+                            "type": "create_topo",
+                            "message": list(unique_coordinates)
+                        }
 
+                # JSON으로 직렬화
+                json_data = json.dumps(data)
+
+                # 소켓 설정 및 연결
+                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                client_socket.connect(('localhost', 9989))
+
+                # JSON 데이터 전송
+                client_socket.sendall(json_data.encode('utf-8'))
+                client_socket.close()
+
+
+
+
+
+
+        except Exception as e:
+            print(f"Error:{e}")
+        
+
+        
         # 리스트에 저장할 때 현재 담겨있는 리스트의 값을 확인해서 만약 동일한 값이 있다면 패스 
         # 만약 텍스트 값이 필요할 경우 동시에 그 레이어의 객체와 가장 가까운 텍스트의 값을 가져오는데 위에서 패스일 경우는 제외
         #
