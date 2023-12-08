@@ -123,8 +123,8 @@ class ksh_layer_selection(QWidget):
         vbox.addWidget(tabs)
 
         # 버튼 생성
-        self.add_btn = CNV_Button('지형 작성')
-        tab1_layout.addWidget(self.add_btn)
+        self.topo_btn = CNV_Button('지형 작성')
+        tab1_layout.addWidget(self.topo_btn)
           
         # '터파기'테이블 위젯 생성--------------------
         
@@ -157,8 +157,8 @@ class ksh_layer_selection(QWidget):
         vbox.addWidget(tabs)
 
         # 버튼 생성
-        self.add_btn = CNV_Button('터파기 작성')
-        tab2_layout.addWidget(self.add_btn)
+        self.digging_btn = CNV_Button('터파기 작성')
+        tab2_layout.addWidget(self.digging_btn)
            
         return groupbox
 

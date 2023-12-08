@@ -37,7 +37,7 @@ from PyQt5.QtWidgets import QApplication, QComboBox, QPushButton, QVBoxLayout, Q
 
 
 
-######
+#########
 
 
 class MainWindow(QMainWindow):
@@ -110,7 +110,7 @@ class MainWindow(QMainWindow):
         
         
         #지형작성 액션
-        self.view_layer_selection.add_btn.clicked.connect(self.action_generate_topo)
+        self.view_layer_selection.topo_btn.clicked.connect(self.action_generate_topo)
 
 
 
