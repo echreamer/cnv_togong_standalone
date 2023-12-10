@@ -34,6 +34,7 @@ from PyQt5.QtWidgets import QApplication, QComboBox, QPushButton, QVBoxLayout, Q
 
 import json
 import socket
+import math
 ##_사용함수
 
 
@@ -42,6 +43,25 @@ import socket
 
 #########
 
+## 특정 좌표점과 가장 가까운 텍스트의 값 추출 함수
+def find_nearest_text(msp, target_x, target_y):
+    
+    # 가장 가까운 텍스트와 거리를 저장할 변수 초기화
+    nearest_text = None
+    min_distance = float('inf')
+
+    # 모든 텍스트 개체 순회
+    for text in msp.query('TEXT'):
+        text_x, text_y, _ = text.dxf.insert
+        # 거리 계산
+        distance = math.sqrt((text_x - target_x) ** 2 + (text_y - target_y) ** 2)
+
+        # 가장 짧은 거리 업데이트
+        if distance < min_distance:
+            min_distance = distance
+            nearest_text = text.dxf.text
+
+    return nearest_text
 
 class MainWindow(QMainWindow):
 
@@ -413,45 +433,86 @@ class MainWindow(QMainWindow):
     #---------------------------------------------------------------
     #---------------------------------------------------------------
     # ---dd
+
+
+
+
+
     # 지형 작성 액션 메소드
     def action_generate_topo(self):
         
         # 현재 선택된 레벨포인트용 레이어
         current_level_layer = self.view_layer_selection.topo_table.cellWidget(0,1).currentText()
+
+        # 현재 선택된 보링점 레이어
+        # current_boring_layer = self.view_layer_selection.topo_table.cellWidget(2,1).currentText()
+
+
         # current_level_layer의 이름을 가진 dxf파일 내의 레이어의 좌표를 가져오고 그것을 담을 리스트에 저장
         # DXF 파일을 읽음
         msp = self.dxf_1.modelspace()
 
         # 중복을 제거하기 위한 집합
         unique_coordinates = set()
+        
+        #보링점 리스트
+        # boling_list = []
+        
 
+        # 지정된 레이어의 모든 객체를 순회
         # 지정된 레이어의 모든 객체를 순회
         for entity in msp.query(f'*[layer=="{current_level_layer}"]'):
             if entity.dxftype() == 'LINE':
                 # 선의 시작점과 끝점 좌표 추출
                 start = entity.dxf.start
                 end = entity.dxf.end
+                        
                 # 중심점 좌표 계산
-                center = ((start.x + end.x) / 2, (start.y + end.y) / 2, (start.z + end.z) / 2)
+                center = ((start.x + end.x) / 2, (start.y + end.y) / 2, float(find_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2)))
+                
                 unique_coordinates.add(center)
             elif entity.dxftype() == 'POINT':
             # 점의 좌표 추출
-                point = (entity.dxf.location.x, entity.dxf.location.y, entity.dxf.location.z)
+                point = (entity.dxf.location.x, entity.dxf.location.y, float(find_nearest_text(msp,entity.dxf.location.x,entity.dxf.location.y)))
                 unique_coordinates.add(point)
 
             elif entity.dxftype() == 'INSERT':
             # 삽입점 좌표 추출
-                insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y, entity.dxf.insert.z)
+                insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,float(find_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)))
                 unique_coordinates.add(insertion_point)
 
             # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
+        # 보링점 찾아서 넣을것임
+        # for entity in msp.query(f'*[layer=="{current_boring_layer}"]'):
+        #     if entity.dxftype() == 'LINE':
+        #         # 선의 시작점과 끝점 좌표 추출
+        #         start = entity.dxf.start
+        #         end = entity.dxf.end
+        #         # 중심점 좌표 계산
+        #         center = ((start.x + end.x) / 2, (start.y + end.y) / 2, (start.z + end.z) / 2)
+        #         unique_coordinates.add(center)
+        #     elif entity.dxftype() == 'POINT':
+        #     # 점의 좌표 추출
+        #         point = (entity.dxf.location.x, entity.dxf.location.y, entity.dxf.location.z)
+        #         unique_coordinates.add(point)
+
+        #     elif entity.dxftype() == 'INSERT':
+        #     # 삽입점 좌표 추출
+        #         insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y, entity.dxf.insert.z)
+        #         unique_coordinates.add(insertion_point)
+
 
         # 집합을 출력
-        print(list(unique_coordinates))
+        unique_coordinates_list = list(unique_coordinates)
+        print(unique_coordinates_list)
+        
+
+        
+        
         try:
                 data = {
                             "type": "create_topo",
-                            "message": list(unique_coordinates)
+                            "message": unique_coordinates_list
                         }
 
                 # JSON으로 직렬화
@@ -482,6 +543,7 @@ class MainWindow(QMainWindow):
         
 
     #--------
+
 
 
 
