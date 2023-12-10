@@ -21,6 +21,9 @@ class ksh_01_topo(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.initUI()  # initUI 메서드 호출
+        
+        self.new_group_count = 1
+        
     def initUI(self):
         
        
@@ -125,172 +128,9 @@ class ksh_01_topo(QWidget):
         
         # 그룹박스들을 스크롤 가능한 영역에 추가
         self.scroll_area.setWidget(self.scroll_content)
-
-        # 그룹박스 생성
-        layout.addWidget(self.Group3_1())
-        layout.addWidget(self.Group3_2())
-        layout.addWidget(self.Group3_3())
-        layout.addWidget(self.Group3_4())
         
         return groupbox
-        
-    #그룹박스 - 보링점1 --------------------------------------------------------------   
-    def Group3_1(self):
-        groupbox = CNV_GroupBox()
-        
-        vbox = QVBoxLayout()
-        groupbox.setLayout(vbox)
-        
-        # 라벨 생성
-        lb1 = CNV_TitleLabel('LX-1')
-        vbox.addWidget(lb1)
-        
-        # 테이블 위젯 생성
-        tableWidget = CNV_TableWidget()
-        tableWidget.setRowCount(8)
-        tableWidget.setColumnCount(2)
-        
-
-        tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
-        tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
-            
-
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(tableWidget.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
-            tableWidget.setCellWidget(i, 0, combo)
-            
-        # 행의 헤더 숨기기
-        header = tableWidget.verticalHeader()
-        header.hide()       
-        
-        # 테이블 열 너비 조정
-        tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
-               
-        vbox.addWidget(tableWidget)
-
-        
-        return groupbox
-    
-    
-    #그룹박스 - 보링점2 --------------------------------------------------------------   
-    def Group3_2(self):
-        groupbox = CNV_GroupBox()
-        
-        vbox = QVBoxLayout()
-        groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
-        
-        # 라벨 생성
-        lb2 = CNV_TitleLabel('LX-2')
-        vbox.addWidget(lb2)
-        
-        # 테이블 위젯 생성
-        tableWidget = CNV_TableWidget()
-        tableWidget.setRowCount(8)
-        tableWidget.setColumnCount(2)
-        
-
-        tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
-        tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
-            
-
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(tableWidget.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
-            tableWidget.setCellWidget(i, 0, combo)
-            
-        # 행의 헤더 숨기기
-        header = tableWidget.verticalHeader()
-        header.hide()       
-        
-        # 테이블 열 너비 조정
-        tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
-               
-        vbox.addWidget(tableWidget)
-
-        return groupbox
-    
-    
-    #그룹박스 - 보링점3 --------------------------------------------------------------   
-    def Group3_3(self):
-        groupbox = CNV_GroupBox()
-        
-        vbox = QVBoxLayout()
-        groupbox.setLayout(vbox)
-        
-        # 라벨 생성
-        lb1 = CNV_TitleLabel('LX-3')
-        vbox.addWidget(lb1)
-        
-        # 테이블 위젯 생성
-        tableWidget = CNV_TableWidget()
-        tableWidget.setRowCount(8)
-        tableWidget.setColumnCount(2)
-        
-
-        tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
-        tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
-            
-
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(tableWidget.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
-            tableWidget.setCellWidget(i, 0, combo)
-            
-        # 행의 헤더 숨기기
-        header = tableWidget.verticalHeader()
-        header.hide()       
-        
-        # 테이블 열 너비 조정
-        tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
-               
-        vbox.addWidget(tableWidget)
-
-        
-        return groupbox
-    
-    
-    #그룹박스 - 보링점4 --------------------------------------------------------------   
-    def Group3_4(self):
-        groupbox = CNV_GroupBox()
-        
-        vbox = QVBoxLayout()
-        groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
-        
-        # 라벨 생성
-        lb2 = CNV_TitleLabel('LX-4')
-        vbox.addWidget(lb2)
-        
-        # 테이블 위젯 생성
-        tableWidget = CNV_TableWidget()
-        tableWidget.setRowCount(8)
-        tableWidget.setColumnCount(2)
-        
-
-        tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
-        tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
-            
-
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(tableWidget.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
-            tableWidget.setCellWidget(i, 0, combo)
-            
-        # 행의 헤더 숨기기
-        header = tableWidget.verticalHeader()
-        header.hide()       
-        
-        # 테이블 열 너비 조정
-        tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
-               
-        vbox.addWidget(tableWidget)
-
-        return groupbox
-
+   
     #새로운 보링점 추가 --------------------------------------
     def addBoringPoint(self):
         # 새로운 보링점 그룹 생성 및 레이아웃 추가
@@ -350,7 +190,7 @@ if __name__ == '__main__':
     else:
         app = QApplication(sys.argv)
 
-    w = ksh_topo()
+    w = ksh_01_topo()
     w.resize(600, 800)
     filename = sys.argv[1]
     if os.path.isfile(filename):
