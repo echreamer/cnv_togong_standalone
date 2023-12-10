@@ -23,6 +23,7 @@ class ksh_01_topo(QWidget):
         self.initUI()  # initUI 메서드 호출
         
         self.new_group_count = 1
+        self.vbox = QVBoxLayout() 
         
     def initUI(self):
         
