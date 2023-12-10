@@ -61,7 +61,6 @@ class ksh_02_digging(QWidget):
     #그룹박스 - 지형 --------------------------------------------------------------------------   
     def Group2(self):
         groupbox = CNV_GroupBox()
-        groupbox.setFixedHeight(250)        
         
         vbox = QVBoxLayout()
         groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
