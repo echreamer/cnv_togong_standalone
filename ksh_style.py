@@ -139,7 +139,7 @@ class CNV_TitleLabel(QLabel):
         font = QFont()
         font.setBold(True)       # 굵게 설정            
         font.setFamily('맑은고딕')  # 원하는 폰트 패밀리로 변경
-        font.setPointSize(11)  # 20은 크기 조절을 위한 임의의 비율 상수
+        font.setPointSize(10)  # 20은 크기 조절을 위한 임의의 비율 상수
         self.setFont(font)
         #self.setAlignment(Qt.AlignCenter)      
         self.setMargin(5)  # 원하는 여백 크기 입력     
@@ -209,7 +209,7 @@ class CNV_CloseButton(QPushButton):
             QPushButton {
                 border: 1px solid #4582EC;
                 border-radius: 3px;
-                padding: 5px;
+                padding: 3px;
                 background-color: #ffffff;
                 color: #4582EC;               
             }
@@ -223,7 +223,7 @@ class CNV_CloseButton(QPushButton):
         font = QFont()
         font.setBold(False)       # 굵게 설정            
         font.setFamily('맑은고딕')  # 원하는 폰트 패밀리로 변경
-        font.setPointSize(10)  # 20은 크기 조절을 위한 임의의 비율 상수
+        font.setPointSize(8)  # 20은 크기 조절을 위한 임의의 비율 상수
         self.setFont(font)
         
         
