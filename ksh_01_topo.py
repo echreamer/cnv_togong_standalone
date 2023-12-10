@@ -103,37 +103,8 @@ class ksh_01_topo(QWidget):
         
         # 탭뷰 생성
         self.tabs = CNV_TabWidget()
-        self.tabs.addTab(QWidget(), 'NX-01')
         vbox.addWidget(self.tabs)
         
-        tab1 = self.tabs.widget(0)
-        tab1_layout = QVBoxLayout(tab1)
-        
-        # 테이블 위젯 생성
-        NX_table = CNV_TableWidget()
-        NX_table.setRowCount(8)
-        NX_table.setColumnCount(2)
-        
-
-        NX_table.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
-        NX_table.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
-            
-
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(NX_table.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
-            NX_table.setCellWidget(i, 0, combo)
-            
-        # 행의 헤더 숨기기
-        header = NX_table.verticalHeader()
-        header.hide()       
-        
-        # 테이블 열 너비 조정
-        NX_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
-        
-        tab1_layout.addWidget(NX_table)
-        tab1.setLayout(tab1_layout)
         
         return groupbox
    
