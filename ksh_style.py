@@ -139,7 +139,7 @@ class CNV_TitleLabel(QLabel):
         font = QFont()
         font.setBold(True)       # 굵게 설정            
         font.setFamily('맑은고딕')  # 원하는 폰트 패밀리로 변경
-        font.setPointSize(13)  # 20은 크기 조절을 위한 임의의 비율 상수
+        font.setPointSize(11)  # 20은 크기 조절을 위한 임의의 비율 상수
         self.setFont(font)
         #self.setAlignment(Qt.AlignCenter)      
         self.setMargin(5)  # 원하는 여백 크기 입력     

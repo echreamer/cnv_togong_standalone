@@ -89,13 +89,13 @@ class MainWindow(QMainWindow):
         
         
         self.view_ksh_01_topo = ksh_01_topo() #레이어 지정
-        self.view_ksh_01_topo.setMinimumWidth(350)
+        self.view_ksh_01_topo.setMinimumWidth(300)
 
         self.view_ksh_02_digging = ksh_02_digging() #보링점
-        self.view_ksh_02_digging.setMinimumWidth(350)
+        self.view_ksh_02_digging.setMinimumWidth(300)
 
         self.view_ksh_03_material = ksh_03_material() #높이 설정
-        self.view_ksh_03_material.setMinimumWidth(350)
+        self.view_ksh_03_material.setMinimumWidth(600)
 
 
         # 위젯 배치------------------------------------------------------------------------------------
