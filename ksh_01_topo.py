@@ -73,8 +73,10 @@ class ksh_01_topo(QWidget):
         # '지형'테이블 위젯 생성--------------------
         self.topo_table = CNV_TableWidget()
         self.topo_table.setColumnCount(2)
-        self.topo_table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
-        self.topo_table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
+
+        self.topo_table.setHorizontalHeaderItem(0, QTableWidgetItem("구분_"))
+        self.topo_table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택_"))
+
             
         # 행의 헤더 숨기기
         header = self.topo_table.verticalHeader()
