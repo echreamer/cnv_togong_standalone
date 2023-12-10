@@ -422,74 +422,121 @@ class MainWindow(QMainWindow):
     def action_generate_topo(self):
         
         # 현재 선택된 레벨포인트용 레이어
-
         current_level_layer = self.view_ksh_01_topo.topo_table.cellWidget(0,1).currentText()
+        current_boring_layer = self.view_ksh_01_topo.topo_table.cellWidget(2,1).currentText()
 
         # current_level_layer의 이름을 가진 dxf파일 내의 레이어의 좌표를 가져오고 그것을 담을 리스트에 저장
         # DXF 파일을 읽음
         msp = self.dxf_1.modelspace()
 
-        # 중복을 제거하기 위한 집합
+        # 중복을 제거하기 위한 표면좌표 집합
         unique_coordinates = set()
         
-        #보링점 리스트
-        # boling_list = []
+        # 중복을 제거하기 위한 보링점 집합
+        unique_boring = set()
         
 
-        # 지정된 레이어의 모든 객체를 순회
         # 지정된 레이어의 모든 객체를 순회
         for entity in msp.query(f'*[layer=="{current_level_layer}"]'):
             if entity.dxftype() == 'LINE':
                 # 선의 시작점과 끝점 좌표 추출
                 start = entity.dxf.start
                 end = entity.dxf.end
-                        
+                nearest_text = find_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2)   
+                point_z =0
+                try:
+                    point_z = float(nearest_text)
+                except:
+                    point_z = (start.z+end.z)/2
+                       
                 # 중심점 좌표 계산
-                center = ((start.x + end.x) / 2, (start.y + end.y) / 2, float(find_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2)))
-                
+                center = ((start.x + end.x) / 2, (start.y + end.y) / 2, point_z)
                 unique_coordinates.add(center)
+
             elif entity.dxftype() == 'POINT':
             # 점의 좌표 추출
-                point = (entity.dxf.location.x, entity.dxf.location.y, float(find_nearest_text(msp,entity.dxf.location.x,entity.dxf.location.y)))
+                nearest_text = find_nearest_text(msp,entity.dxf.location.x, entity.dxf.location.y)   
+                point_z =0
+                try:
+                    point_z = float(nearest_text)
+                except:
+                    point_z = entity.dxf.location.z
+                point = (entity.dxf.location.x, entity.dxf.location.y, point_z)
                 unique_coordinates.add(point)
 
             elif entity.dxftype() == 'INSERT':
             # 삽입점 좌표 추출
-                insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,float(find_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)))
+                nearest_text = find_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)   
+                point_z = 0
+                try:
+                    point_z = float(nearest_text)
+                except:
+                    point_z = entity.dxf.insert.x
+
+                insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,point_z)
                 unique_coordinates.add(insertion_point)
+            # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
+
+        # 보링점 찾아서 넣을것임
+        # 지정된 레이어의 모든 객체를 순회
+        for entity in msp.query(f'*[layer=="{current_boring_layer}"]'):
+            if entity.dxftype() == 'LINE':
+                # 선의 시작점과 끝점 좌표 추출
+                start = entity.dxf.start
+                end = entity.dxf.end
+                nearest_text = find_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2)   
+                point_z =0
+                try:
+                    point_z = float(nearest_text)
+                except:
+                    point_z = (start.z+end.z)/2
+                       
+                # 중심점 좌표 계산
+                center = ((start.x + end.x) / 2, (start.y + end.y) / 2, point_z)
+                unique_boring.add(center)
+                unique_coordinates.add(center)
+
+            elif entity.dxftype() == 'POINT':
+            # 점의 좌표 추출
+                nearest_text = find_nearest_text(msp,entity.dxf.location.x, entity.dxf.location.y)   
+                point_z =0
+                try:
+                    point_z = float(nearest_text)
+                except:
+                    point_z = entity.dxf.location.z
+                point = (entity.dxf.location.x, entity.dxf.location.y, point_z)
+                unique_boring.add(point)
+                unique_coordinates.add(center)
+
+
+            elif entity.dxftype() == 'INSERT':
+            # 삽입점 좌표 추출
+                nearest_text = find_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)   
+                point_z = 0
+                try:
+                    point_z = float(nearest_text)
+                except:
+                    point_z = entity.dxf.insert.x
+
+                insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,point_z)
+                unique_boring.add(insertion_point)
+                unique_coordinates.add(center)
 
             # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
-        # 보링점 찾아서 넣을것임
-        # for entity in msp.query(f'*[layer=="{current_boring_layer}"]'):
-        #     if entity.dxftype() == 'LINE':
-        #         # 선의 시작점과 끝점 좌표 추출
-        #         start = entity.dxf.start
-        #         end = entity.dxf.end
-        #         # 중심점 좌표 계산
-        #         center = ((start.x + end.x) / 2, (start.y + end.y) / 2, (start.z + end.z) / 2)
-        #         unique_coordinates.add(center)
-        #     elif entity.dxftype() == 'POINT':
-        #     # 점의 좌표 추출
-        #         point = (entity.dxf.location.x, entity.dxf.location.y, entity.dxf.location.z)
-        #         unique_coordinates.add(point)
-
-        #     elif entity.dxftype() == 'INSERT':
-        #     # 삽입점 좌표 추출
-        #         insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y, entity.dxf.insert.z)
-        #         unique_coordinates.add(insertion_point)
-
 
         # 집합을 출력
-        unique_coordinates_list = list(unique_coordinates)
-        print(unique_coordinates_list)
-        
+        top_coordinates_list = list(unique_coordinates)
+        top_boring_list = list(unique_boring)
+
+        print(top_coordinates_list)
+        print(top_boring_list)
 
         
         
         try:
                 data = {
                             "type": "create_topo",
-                            "message": unique_coordinates_list
+                            "message": top_coordinates_list
                         }
 
                 # JSON으로 직렬화
