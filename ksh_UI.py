@@ -417,7 +417,7 @@ class MainWindow(QMainWindow):
     def action_generate_topo(self):
         
         # 현재 선택된 레벨포인트용 레이어
-        current_level_layer = self.view_layer_selection.table.cellWidget(0,1).currentText()
+        current_level_layer = self.view_layer_selection.topo_table.cellWidget(0,1).currentText()
         # current_level_layer의 이름을 가진 dxf파일 내의 레이어의 좌표를 가져오고 그것을 담을 리스트에 저장
         # DXF 파일을 읽음
         msp = self.dxf_1.modelspace()
