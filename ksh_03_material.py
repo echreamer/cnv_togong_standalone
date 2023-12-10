@@ -23,22 +23,23 @@ class ksh_03_material(QWidget):
         self.initUI()  # initUI 메서드 호출
     def initUI(self):
         
-       
-        # 기본 폰트
-        #self.font = QFont()
-        #self.font.setBold(False)       # 굵게 설정            
-        #self.font.setFamily('맑은고딕')  # 원하는 폰트 패밀리로 변경
-        #self.font.setPointSize(int(self.width() / 70))  # 20은 크기 조절을 위한 임의의 비율 상수
-
-        # 수직 박스 레이아웃 생성
+        hbox = QHBoxLayout()
+        self.setLayout(hbox)
+        
+        ## 레이아웃 - 왼쪽 ----------------------------------------------------------------------------------
         vbox_1 = QVBoxLayout()
-        self.setLayout(vbox_1)
+        hbox.addLayout(vbox_1)
+        
+        ## 레이아웃 - 오른쪽 ----------------------------------------------------------------------------------
+        vbox_2 = QVBoxLayout()
+        hbox.addLayout(vbox_2)
 
 
         # 그룹박스 생성
         vbox_1.addWidget(self.Group1())
         vbox_1.addWidget(self.Group2())
         vbox_1.addWidget(self.Group3())
+        
 
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
     def Group1(self):
@@ -254,7 +255,6 @@ class ksh_03_material(QWidget):
         vbox.addWidget(tabs)       
          
         return groupbox
-
 
 
 if __name__ == '__main__':
