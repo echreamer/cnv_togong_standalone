@@ -2,10 +2,9 @@
 import os.path
 from IFCCustomDelegate import *
 
-from ksh_layer_selection import *
-from ksh_report_result import *
-from ksh_height_setting import *
-from ksh_information import *
+from ksh_01_topo import *
+from ksh_02_digging import *
+from ksh_03_material import *
 
 from IFCListingWidget import *
 import cnv_methods as cnv
@@ -89,51 +88,43 @@ class MainWindow(QMainWindow):
         # 위젯 생성-------------------------------------------------------------------------------------
         
         
-        self.view_layer_selection = ksh_layer_selection() #레이어 지정
-        self.view_layer_selection.setMinimumWidth(350)
+        self.view_ksh_01_topo = ksh_01_topo() #레이어 지정
+        self.view_ksh_01_topo.setMinimumWidth(350)
 
-        self.ksh_report_result = ksh_report_result() #보링점
-        self.ksh_report_result.setMinimumWidth(350)
+        self.view_ksh_02_digging = ksh_02_digging() #보링점
+        self.view_ksh_02_digging.setMinimumWidth(350)
 
-        self.ksh_height_setting = ksh_height_setting() #높이 설정
-        self.ksh_height_setting.setMinimumWidth(350)
+        self.view_ksh_03_material = ksh_03_material() #높이 설정
+        self.view_ksh_03_material.setMinimumWidth(350)
 
-        self.ksh_information = ksh_information() #부재 정보 입력
-        self.ksh_information.setMinimumWidth(350)
 
         # 위젯 배치------------------------------------------------------------------------------------
 
-        self.dock2 = CNV_DockWidget('레이어 선택', self)
-        self.dock2.setWidget(self.view_layer_selection)
+        self.dock2 = CNV_DockWidget('지형', self)
+        self.dock2.setWidget(self.view_ksh_01_topo)
         self.dock2.setFloating(False)
         self.addDockWidget(Qt.BottomDockWidgetArea, self.dock2)
 
-        self.dock3 = CNV_DockWidget('시추조사 결과 입력', self)
-        self.dock3.setWidget(self.ksh_report_result)
+        self.dock3 = CNV_DockWidget('터파기', self)
+        self.dock3.setWidget(self.view_ksh_02_digging)
         self.dock3.setFloating(False)
         self.addDockWidget(Qt.BottomDockWidgetArea, self.dock3)
 
-        self.dock4 = CNV_DockWidget('높이 설정', self)
-        self.dock4.setWidget(self.ksh_height_setting)
+        self.dock4 = CNV_DockWidget('부재', self)
+        self.dock4.setWidget(self.view_ksh_03_material)
         self.dock4.setFloating(False)
         self.addDockWidget(Qt.BottomDockWidgetArea, self.dock4)
-
-        self.dock5 = CNV_DockWidget('부재 정보 입력', self)
-        self.dock5.setWidget(self.ksh_information)
-        self.dock5.setFloating(False)
-        self.addDockWidget(Qt.BottomDockWidgetArea, self.dock5)
-        
         
         #dxf파일 열기 액션
 
 
-        self.view_layer_selection.btn1.clicked.connect(self.action_dxf_open_click_1)
-        self.view_layer_selection.btn2.clicked.connect(self.action_dxf_open_click_2)
-        self.view_layer_selection.btn3.clicked.connect(self.action_dxf_open_click_3)
+        self.view_ksh_01_topo.btn1.clicked.connect(self.action_dxf_open_click_1)
+        self.view_ksh_02_digging.btn2.clicked.connect(self.action_dxf_open_click_2)
+        self.view_ksh_03_material.btn3.clicked.connect(self.action_dxf_open_click_3)
         
         
         #지형작성 액션
-        self.view_layer_selection.topo_btn.clicked.connect(self.action_generate_topo)
+        self.view_ksh_01_topo.topo_btn.clicked.connect(self.action_generate_topo)
 
 
 
@@ -165,7 +156,7 @@ class MainWindow(QMainWindow):
         toolbar.addWidget(spacer_widget)        
         
         # 체크박스 2
-        self.check_2 = CNV_CheckBox("레이어 선택")
+        self.check_2 = CNV_CheckBox("지형")
         self.check_2.stateChanged.connect(self.toggle_2)
         self.check_2.setChecked(True)  # 체크박스 초기에 선택된 상태로 설정
         toolbar.addWidget(self.check_2)
@@ -177,7 +168,7 @@ class MainWindow(QMainWindow):
         toolbar.addWidget(spacer_widget)        
         
         # 체크박스 3
-        self.check_3 = CNV_CheckBox("시추조사 결과 입력")
+        self.check_3 = CNV_CheckBox("터파기")
         self.check_3.stateChanged.connect(self.toggle_3)
         self.check_3.setChecked(True)  # 체크박스 초기에 선택된 상태로 설정
         toolbar.addWidget(self.check_3)
@@ -190,22 +181,10 @@ class MainWindow(QMainWindow):
         toolbar.addWidget(spacer_widget)        
         
         # 체크박스 4
-        self.check_4 = CNV_CheckBox("높이 설정")
+        self.check_4 = CNV_CheckBox("부재")
         self.check_4.stateChanged.connect(self.toggle_4)
         self.check_4.setChecked(True)  # 체크박스 초기에 선택된 상태로 설정
         toolbar.addWidget(self.check_4)
-        
-        # 공간 확보
-        spacer_widget = QWidget()
-        spacer_widget.setFixedWidth(20)  # 너비 조절을 통해 간격 조정
-        spacer_widget.setStyleSheet("background-color: #EAF1FD; margin-bottom: 10px;")      
-        toolbar.addWidget(spacer_widget)        
-        
-        # 체크박스 5
-        self.check_5 = CNV_CheckBox("부재 정보 입력")
-        self.check_5.stateChanged.connect(self.toggle_5)
-        self.check_5.setChecked(True)  # 체크박스 초기에 선택된 상태로 설정
-        toolbar.addWidget(self.check_5)
         
         
         #메뉴바
@@ -233,7 +212,7 @@ class MainWindow(QMainWindow):
         self.dxf_1_layers=self.load_dxf_layers(doc_1)
         self.input_dxf_layer_topo_widget(self.dxf_1_layers)#콤보박스에 리스트업
 
-        self.view_layer_selection.file_path_label_1.setText(f"파일 경로: {filename}")
+        self.view_ksh_01_topo.file_path_label_1.setText(f"파일 경로: {filename}")
         print(doc_1)
         print(self.dxf_1_layers)
         
@@ -260,7 +239,7 @@ class MainWindow(QMainWindow):
         self.dxf_2_layers=self.load_dxf_layers(doc_2)
         self.input_dxf_layer_digging_widget(self.dxf_2_layers)#콤보박스에 리스트업
 
-        self.view_layer_selection.file_path_label_2.setText(f"파일 경로: {filename}")
+        self.view_ksh_01_topo.file_path_label_2.setText(f"파일 경로: {filename}")
         print(doc_2)
         print(self.dxf_2_layers)
         
@@ -292,7 +271,7 @@ class MainWindow(QMainWindow):
         
         
         
-        self.view_layer_selection.file_path_label_3.setText(f"파일 경로: {filename}")
+        self.view_ksh_01_topo.file_path_label_3.setText(f"파일 경로: {filename}")
         print(doc_3)
         print(self.dxf_3_layers)
         
@@ -326,109 +305,110 @@ class MainWindow(QMainWindow):
     # '현황측량도'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_topo_widget(self,layerList):
         print(layerList)
-        rowCount = 2
-        self.view_layer_selection.topo_table.setRowCount(rowCount)
-        self.view_layer_selection.topo_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_layer_selection.topo_table.setItem(1,0, QTableWidgetItem("대지경계선"))
-
-        for i in range(self.view_layer_selection.topo_table.rowCount()):
+        rowCount = 3
+        self.view_ksh_01_topo.topo_table.setRowCount(rowCount)
+        self.view_ksh_01_topo.topo_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_ksh_01_topo.topo_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_ksh_01_topo.topo_table.setItem(2,0, QTableWidgetItem("보링점"))
+        
+        for i in range(self.view_ksh_01_topo.topo_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_layer_selection.topo_table.setCellWidget(i, 1, combo)
+            self.view_ksh_01_topo.topo_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_layer_selection.topo_table.rowCount()):
-            item = self.view_layer_selection.topo_table.item(i, 0)
+        for i in range(self.view_ksh_01_topo.topo_table.rowCount()):
+            item = self.view_ksh_01_topo.topo_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
 
     # '터파기'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_digging_widget(self,layerList):
         print(layerList)
         rowCount = 2
-        self.view_layer_selection.digging_table.setRowCount(rowCount)
-        self.view_layer_selection.digging_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_layer_selection.digging_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_ksh_01_topo.digging_table.setRowCount(rowCount)
+        self.view_ksh_01_topo.digging_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_ksh_01_topo.digging_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
-        for i in range(self.view_layer_selection.digging_table.rowCount()):
+        for i in range(self.view_ksh_01_topo.digging_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_layer_selection.digging_table.setCellWidget(i, 1, combo)
+            self.view_ksh_01_topo.digging_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_layer_selection.digging_table.rowCount()):
-            item = self.view_layer_selection.digging_table.item(i, 0)
+        for i in range(self.view_ksh_01_topo.digging_table.rowCount()):
+            item = self.view_ksh_01_topo.digging_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
             
     # '파일'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_pile_widget(self,layerList):
         print(layerList)
         rowCount = 2
-        self.view_layer_selection.pile_table.setRowCount(rowCount)
-        self.view_layer_selection.pile_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_layer_selection.pile_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_ksh_01_topo.pile_table.setRowCount(rowCount)
+        self.view_ksh_01_topo.pile_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_ksh_01_topo.pile_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
-        for i in range(self.view_layer_selection.pile_table.rowCount()):
+        for i in range(self.view_ksh_01_topo.pile_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_layer_selection.pile_table.setCellWidget(i, 1, combo)
+            self.view_ksh_01_topo.pile_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_layer_selection.pile_table.rowCount()):
-            item = self.view_layer_selection.pile_table.item(i, 0)
+        for i in range(self.view_ksh_01_topo.pile_table.rowCount()):
+            item = self.view_ksh_01_topo.pile_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
             
     # '흙막이'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_mudblock_widget(self,layerList):
         print(layerList)
         rowCount = 2
-        self.view_layer_selection.mudblock_table.setRowCount(rowCount)
-        self.view_layer_selection.mudblock_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_layer_selection.mudblock_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_ksh_01_topo.mudblock_table.setRowCount(rowCount)
+        self.view_ksh_01_topo.mudblock_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_ksh_01_topo.mudblock_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
-        for i in range(self.view_layer_selection.mudblock_table.rowCount()):
+        for i in range(self.view_ksh_01_topo.mudblock_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_layer_selection.mudblock_table.setCellWidget(i, 1, combo)
+            self.view_ksh_01_topo.mudblock_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_layer_selection.mudblock_table.rowCount()):
-            item = self.view_layer_selection.mudblock_table.item(i, 0)
+        for i in range(self.view_ksh_01_topo.mudblock_table.rowCount()):
+            item = self.view_ksh_01_topo.mudblock_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)            
             
     # '버팀대'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_bracing_widget(self,layerList):
         print(layerList)
         rowCount = 2
-        self.view_layer_selection.bracing_table.setRowCount(rowCount)
-        self.view_layer_selection.bracing_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_layer_selection.bracing_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_ksh_01_topo.bracing_table.setRowCount(rowCount)
+        self.view_ksh_01_topo.bracing_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_ksh_01_topo.bracing_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
-        for i in range(self.view_layer_selection.bracing_table.rowCount()):
+        for i in range(self.view_ksh_01_topo.bracing_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_layer_selection.bracing_table.setCellWidget(i, 1, combo)
+            self.view_ksh_01_topo.bracing_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_layer_selection.bracing_table.rowCount()):
-            item = self.view_layer_selection.bracing_table.item(i, 0)
+        for i in range(self.view_ksh_01_topo.bracing_table.rowCount()):
+            item = self.view_ksh_01_topo.bracing_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
             
     # '복공판'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_board_widget(self,layerList):
         print(layerList)
         rowCount = 2
-        self.view_layer_selection.board_table.setRowCount(rowCount)
-        self.view_layer_selection.board_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_layer_selection.board_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_ksh_01_topo.board_table.setRowCount(rowCount)
+        self.view_ksh_01_topo.board_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_ksh_01_topo.board_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
-        for i in range(self.view_layer_selection.board_table.rowCount()):
+        for i in range(self.view_ksh_01_topo.board_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_layer_selection.board_table.setCellWidget(i, 1, combo)
+            self.view_ksh_01_topo.board_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_layer_selection.board_table.rowCount()):
-            item = self.view_layer_selection.board_table.item(i, 0)
+        for i in range(self.view_ksh_01_topo.board_table.rowCount()):
+            item = self.view_ksh_01_topo.board_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)            
     #---------------------------------------------------------------
     #---------------------------------------------------------------
@@ -442,11 +422,8 @@ class MainWindow(QMainWindow):
     def action_generate_topo(self):
         
         # 현재 선택된 레벨포인트용 레이어
-        current_level_layer = self.view_layer_selection.topo_table.cellWidget(0,1).currentText()
 
-        # 현재 선택된 보링점 레이어
-        # current_boring_layer = self.view_layer_selection.topo_table.cellWidget(2,1).currentText()
-
+        current_level_layer = self.view_ksh_01_topo.topo_table.cellWidget(0,1).currentText()
 
         # current_level_layer의 이름을 가진 dxf파일 내의 레이어의 좌표를 가져오고 그것을 담을 리스트에 저장
         # DXF 파일을 읽음
@@ -569,10 +546,6 @@ class MainWindow(QMainWindow):
     def toggle_4(self, state):
         # 체크박스 상태에 따라 view_3d_quantity 위젯의 가시성을 설정
         self.dock4.setVisible(state == Qt.Checked)        
-    
-    def toggle_5(self, state):
-        # 체크박스 상태에 따라 view_3d_quantity 위젯의 가시성을 설정
-        self.dock5.setVisible(state == Qt.Checked)        
 
         
         

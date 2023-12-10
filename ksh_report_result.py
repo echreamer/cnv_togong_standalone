@@ -25,41 +25,47 @@ class ksh_report_result(QWidget):
               
     def initUI(self):
         
-        # 수직 박스 레이아웃 생성
-        self.vbox = QVBoxLayout() 
-        self.setLayout(self.vbox)
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
+
+        # 탭뷰 생성
+        tabs = CNV_TabWidget()
+        tabs.addTab(QWidget(), '사용자 입력')
+        tabs.addTab(QWidget(), '결과')  # 빈 탭 추가
+        vbox.addWidget(tabs)
+        
+        tab1 = tabs.widget(0)
+        tab1_layout = QVBoxLayout(tab1)
         
         # 공간 확보
         spacer = QSpacerItem(10, 10, QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.vbox.addSpacerItem(spacer)   
+        tab1_layout.addSpacerItem(spacer)   
 
         # 버튼 생성
         btn = CNV_Button('보링점 추가')
         btn.clicked.connect(self.addBoringPoint)        
-        self.vbox.addWidget(btn)
-
+        tab1_layout.addWidget(btn)
 
         # 스크롤 가능한 영역 생성
-        scroll_area = CNV_ScrollArea()
-        scroll_area.setWidgetResizable(True)  # 스크롤 영역 크기 자동 조절 설정
-
+        self.scroll_area = CNV_ScrollArea()
+        self.scroll_area.setWidgetResizable(True)  # 스크롤 영역 크기 자동 조절 설정
+        tab1_layout.addWidget(self.scroll_area)
+        
         # 그룹박스들을 담을 위젯 생성
         self.scroll_content = QWidget()
         layout = QVBoxLayout(self.scroll_content)  # 수직 레이아웃 설정
         layout.setAlignment(Qt.AlignTop)  # 위쪽 정렬
         
-        
         # 그룹박스들을 스크롤 가능한 영역에 추가
-        scroll_area.setWidget(self.scroll_content)
-        self.vbox.addWidget(scroll_area)
+        self.scroll_area.setWidget(self.scroll_content)
 
         # 그룹박스 생성
         layout.addWidget(self.Group1())
         layout.addWidget(self.Group2())
         layout.addWidget(self.Group3())
         layout.addWidget(self.Group4())
-    
 
+        
     #그룹박스 - 보링점1 --------------------------------------------------------------   
     def Group1(self):
         groupbox = CNV_GroupBox()
