@@ -15,7 +15,7 @@ from IFCCustomDelegate import *
 from ksh_style import *
 
 
-class ksh_topo(QWidget):
+class ksh_03_material(QWidget):
 
     
     def __init__(self):
@@ -51,29 +51,14 @@ class ksh_topo(QWidget):
         lb = CNV_TitleLabel('파일 불러오기')
         vbox.addWidget(lb)        
         
-        ## 버튼 생성 - 1
-        self.btn1 = CNV_Button('현황측량도')
-        vbox.addWidget(self.btn1)
-        
-        # 파일 경로 라벨 생성
-        self.file_path_label_1 = CNV_Label("파일 경로:")
-        vbox.addWidget(self.file_path_label_1)
-        
-        ## 버튼 생성 - 2
-        self.btn2 = CNV_Button('터파기 레이아웃')
-        vbox.addWidget(self.btn2)
-        
-        # 파일 경로 라벨 생성
-        self.file_path_label_2 = CNV_Label("파일 경로:")
-        vbox.addWidget(self.file_path_label_2)
-        
         ## 버튼 생성 - 3
-        self.btn3 = CNV_Button('굴착계획평면도')
+        self.btn3 = CNV_Button('부재')
         vbox.addWidget(self.btn3)
         
         # 파일 경로 라벨 생성
         self.file_path_label_3 = CNV_Label("파일 경로:")
         vbox.addWidget(self.file_path_label_3)
+     
         
         return groupbox
     
@@ -283,7 +268,7 @@ if __name__ == '__main__':
     else:
         app = QApplication(sys.argv)
 
-    w = ksh_topo()
+    w = ksh_03_material()
     w.resize(600, 800)
     filename = sys.argv[1]
     if os.path.isfile(filename):

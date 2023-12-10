@@ -15,7 +15,7 @@ from IFCCustomDelegate import *
 from ksh_style import *
 
 
-class ksh_topo(QWidget):
+class ksh_01_topo(QWidget):
 
     
     def __init__(self):
@@ -58,22 +58,7 @@ class ksh_topo(QWidget):
         # 파일 경로 라벨 생성
         self.file_path_label_1 = CNV_Label("파일 경로:")
         vbox.addWidget(self.file_path_label_1)
-        
-        ## 버튼 생성 - 2
-        self.btn2 = CNV_Button('터파기 레이아웃')
-        vbox.addWidget(self.btn2)
-        
-        # 파일 경로 라벨 생성
-        self.file_path_label_2 = CNV_Label("파일 경로:")
-        vbox.addWidget(self.file_path_label_2)
-        
-        ## 버튼 생성 - 3
-        self.btn3 = CNV_Button('굴착계획평면도')
-        vbox.addWidget(self.btn3)
-        
-        # 파일 경로 라벨 생성
-        self.file_path_label_3 = CNV_Label("파일 경로:")
-        vbox.addWidget(self.file_path_label_3)
+     
         
         return groupbox
     
@@ -87,25 +72,13 @@ class ksh_topo(QWidget):
         # 라벨 생성
         lb1 = CNV_TitleLabel('지형')
         vbox.addWidget(lb1)        
-
-        # 탭 위젯 생성
-        tabs = CNV_TabWidget()
-        tabs.addTab(QWidget(), '현황')
-        tabs.addTab(QWidget(), '터파기')  # 빈 탭 추가
         
         # '지형'테이블 위젯 생성--------------------
         self.topo_table = CNV_TableWidget()
         # self.table.setRowCount(8)
         self.topo_table.setColumnCount(2)
-
         self.topo_table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
         self.topo_table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
-
-        # # 두 번째 열에 콤보박스 추가 <- ksh_UI.py 파일에서 코드 생성
-        # for i in range(self.table.rowCount()):
-        #     combo = CNV_ComboBox()
-        #     combo.addItems(["Option 1", "Option 2", "Option 3"])
-        #     self.table.setCellWidget(i, 1, combo)
             
         # 행의 헤더 숨기기
         header = self.topo_table.verticalHeader()
@@ -113,53 +86,12 @@ class ksh_topo(QWidget):
 
         # 테이블 열 너비 조정
         self.topo_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
-
-        # 탭에 테이블 추가
-        tab1 = tabs.widget(0)
-        tab1_layout = QVBoxLayout()
-        tab1_layout.addWidget(self.topo_table)
-        tab1.setLayout(tab1_layout)
-
-        vbox.addWidget(tabs)
+        vbox.addWidget(self.topo_table)
 
         # 버튼 생성
         self.topo_btn = CNV_Button('지형 작성')
-        tab1_layout.addWidget(self.topo_btn)
+        vbox.addWidget(self.topo_btn)
           
-        # '터파기'테이블 위젯 생성--------------------
-        
-        self.digging_table = CNV_TableWidget()
-        # self.table.setRowCount(8)
-        self.digging_table.setColumnCount(2)
-
-        self.digging_table.setHorizontalHeaderItem(0, QTableWidgetItem("터파기 구역"))
-        self.digging_table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
-
-        # # 두 번째 열에 콤보박스 추가 <- ksh_UI.py 파일에서 코드 생성
-        # for i in range(self.table.rowCount()):
-        #     combo = CNV_ComboBox()
-        #     combo.addItems(["Option 1", "Option 2", "Option 3"])
-        #     self.table.setCellWidget(i, 1, combo)
-            
-        # 행의 헤더 숨기기
-        header = self.digging_table.verticalHeader()
-        header.hide()       
-
-        # 테이블 열 너비 조정
-        self.digging_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
-
-        # 탭에 테이블 추가
-        tab2 = tabs.widget(1)
-        tab2_layout = QVBoxLayout()
-        tab2_layout.addWidget(self.digging_table)
-        tab2.setLayout(tab2_layout)
-
-        vbox.addWidget(tabs)
-
-        # 버튼 생성
-        self.digging_btn = CNV_Button('터파기 작성')
-        tab2_layout.addWidget(self.digging_btn)
-           
         return groupbox
 
     #그룹박스 - 부재 ------------------------------------------------------------------ 
