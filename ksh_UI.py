@@ -143,7 +143,7 @@ class MainWindow(QMainWindow):
 
         # 프로젝트 내보내기 --------------------------------------------------------------------------
         action_save = QAction("프로젝트 내보내기", self)
-        action_save.triggered.connect(self.action_save_click)
+        action_save.triggered.connect(self.action_generate_stratum)
         toolbar.addAction(action_save)        
         
         
@@ -506,7 +506,7 @@ class MainWindow(QMainWindow):
                     point_z = entity.dxf.location.z
                 point = (entity.dxf.location.x, entity.dxf.location.y, point_z)
                 unique_boring.add(point)
-                unique_coordinates.add(center)
+                unique_coordinates.add(point)
 
 
             elif entity.dxftype() == 'INSERT':
@@ -520,7 +520,7 @@ class MainWindow(QMainWindow):
 
                 insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,point_z)
                 unique_boring.add(insertion_point)
-                unique_coordinates.add(center)
+                unique_coordinates.add(insertion_point)
 
             # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
 
@@ -530,6 +530,8 @@ class MainWindow(QMainWindow):
 
         print(top_coordinates_list)
         print(top_boring_list)
+        for xyz in top_boring_list:
+            self.view_ksh_01_topo.addBoringPoint()
 
         
         
@@ -568,9 +570,10 @@ class MainWindow(QMainWindow):
 
     #--------
 
-
-
-
+     # 지층높이 결정 메소드
+    def action_generate_stratum(self):
+        for gbox in self.view_ksh_01_topo.scroll_content.children():
+            print(gbox.main_vbox.itemAt(0).cellWidget(0,0).currentText())
 
 
 
