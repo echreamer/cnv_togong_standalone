@@ -31,14 +31,14 @@ class ksh_03_material(QWidget):
         #self.font.setPointSize(int(self.width() / 70))  # 20은 크기 조절을 위한 임의의 비율 상수
 
         # 수직 박스 레이아웃 생성
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
+        vbox_1 = QVBoxLayout()
+        self.setLayout(vbox_1)
 
 
         # 그룹박스 생성
-        vbox.addWidget(self.Group1())
-        vbox.addWidget(self.Group2())
-        vbox.addWidget(self.Group3())
+        vbox_1.addWidget(self.Group1())
+        vbox_1.addWidget(self.Group2())
+        vbox_1.addWidget(self.Group3())
 
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
     def Group1(self):
@@ -46,13 +46,9 @@ class ksh_03_material(QWidget):
         
         vbox = QVBoxLayout()
         groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
-
-        # 라벨 생성
-        lb = CNV_TitleLabel('파일 불러오기')
-        vbox.addWidget(lb)        
         
         ## 버튼 생성 - 3
-        self.btn3 = CNV_Button('부재')
+        self.btn3 = CNV_Button('굴착계획평면도 가져오기')
         vbox.addWidget(self.btn3)
         
         # 파일 경로 라벨 생성
