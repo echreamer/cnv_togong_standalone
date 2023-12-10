@@ -291,7 +291,7 @@ class ksh_01_topo(QWidget):
 
         return groupbox
 
-    #새로운 보링점 추가 --------------------------------------
+   #새로운 보링점 추가 --------------------------------------
     def addBoringPoint(self):
         # 새로운 보링점 그룹 생성 및 레이아웃 추가
         new_group = self.createBoringPointGroup()
@@ -339,7 +339,7 @@ class ksh_01_topo(QWidget):
         self.vbox.removeWidget(groupbox)
         groupbox.deleteLater()
          
-        return groupbox
+        return groupbox 
 
 
 
@@ -350,7 +350,7 @@ if __name__ == '__main__':
     else:
         app = QApplication(sys.argv)
 
-    w = ksh_topo()
+    w = ksh_01_topo()
     w.resize(600, 800)
     filename = sys.argv[1]
     if os.path.isfile(filename):
