@@ -342,73 +342,78 @@ class MainWindow(QMainWindow):
     # '파일'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_pile_widget(self,layerList):
         print(layerList)
-        rowCount = 2
-        self.view_ksh_01_topo.pile_table.setRowCount(rowCount)
-        self.view_ksh_01_topo.pile_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_ksh_01_topo.pile_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        rowCount = 3
+        self.view_ksh_03_material.pile_table.setRowCount(rowCount)
+        self.view_ksh_03_material.pile_table.setItem(0,0, QTableWidgetItem("PRD"))
+        self.view_ksh_03_material.pile_table.setItem(1,0, QTableWidgetItem("RCD"))
+        self.view_ksh_03_material.pile_table.setItem(2,0, QTableWidgetItem("PHC"))
 
-        for i in range(self.view_ksh_01_topo.pile_table.rowCount()):
+        for i in range(self.view_ksh_03_material.pile_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_ksh_01_topo.pile_table.setCellWidget(i, 1, combo)
+            self.view_ksh_03_material.pile_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_ksh_01_topo.pile_table.rowCount()):
-            item = self.view_ksh_01_topo.pile_table.item(i, 0)
+        for i in range(self.view_ksh_03_material.pile_table.rowCount()):
+            item = self.view_ksh_03_material.pile_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
             
     # '흙막이'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_mudblock_widget(self,layerList):
         print(layerList)
-        rowCount = 2
-        self.view_ksh_01_topo.mudblock_table.setRowCount(rowCount)
-        self.view_ksh_01_topo.mudblock_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_ksh_01_topo.mudblock_table.setItem(1,0, QTableWidgetItem("대지경계선"))
-
-        for i in range(self.view_ksh_01_topo.mudblock_table.rowCount()):
+        rowCount = 4
+        self.view_ksh_03_material.mudblock_table.setRowCount(rowCount)
+        self.view_ksh_03_material.mudblock_table.setItem(0,0, QTableWidgetItem("CIP"))
+        self.view_ksh_03_material.mudblock_table.setItem(1,0, QTableWidgetItem("PILE"))
+        self.view_ksh_03_material.mudblock_table.setItem(2,0, QTableWidgetItem("H-PILE"))
+        self.view_ksh_03_material.mudblock_table.setItem(3,0, QTableWidgetItem("슬러리월"))
+        
+        for i in range(self.view_ksh_03_material.mudblock_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_ksh_01_topo.mudblock_table.setCellWidget(i, 1, combo)
+            self.view_ksh_03_material.mudblock_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_ksh_01_topo.mudblock_table.rowCount()):
-            item = self.view_ksh_01_topo.mudblock_table.item(i, 0)
+        for i in range(self.view_ksh_03_material.mudblock_table.rowCount()):
+            item = self.view_ksh_03_material.mudblock_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)            
             
     # '버팀대'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_bracing_widget(self,layerList):
         print(layerList)
-        rowCount = 2
-        self.view_ksh_01_topo.bracing_table.setRowCount(rowCount)
-        self.view_ksh_01_topo.bracing_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_ksh_01_topo.bracing_table.setItem(1,0, QTableWidgetItem("대지경계선"))
-
-        for i in range(self.view_ksh_01_topo.bracing_table.rowCount()):
+        rowCount = 4
+        self.view_ksh_03_material.bracing_table.setRowCount(rowCount)
+        self.view_ksh_03_material.bracing_table.setItem(0,0, QTableWidgetItem("센터파일"))
+        self.view_ksh_03_material.bracing_table.setItem(1,0, QTableWidgetItem("어스앵커"))
+        self.view_ksh_03_material.bracing_table.setItem(2,0, QTableWidgetItem("스트러트"))
+        self.view_ksh_03_material.bracing_table.setItem(3,0, QTableWidgetItem("띠장"))
+        
+        for i in range(self.view_ksh_03_material.bracing_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_ksh_01_topo.bracing_table.setCellWidget(i, 1, combo)
+            self.view_ksh_03_material.bracing_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_ksh_01_topo.bracing_table.rowCount()):
-            item = self.view_ksh_01_topo.bracing_table.item(i, 0)
+        for i in range(self.view_ksh_03_material.bracing_table.rowCount()):
+            item = self.view_ksh_03_material.bracing_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
             
     # '복공판'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_board_widget(self,layerList):
         print(layerList)
         rowCount = 2
-        self.view_ksh_01_topo.board_table.setRowCount(rowCount)
-        self.view_ksh_01_topo.board_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_ksh_01_topo.board_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_ksh_03_material.board_table.setRowCount(rowCount)
+        self.view_ksh_03_material.board_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_ksh_03_material.board_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
-        for i in range(self.view_ksh_01_topo.board_table.rowCount()):
+        for i in range(self.view_ksh_03_material.board_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_ksh_01_topo.board_table.setCellWidget(i, 1, combo)
+            self.view_ksh_03_material.board_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_ksh_01_topo.board_table.rowCount()):
-            item = self.view_ksh_01_topo.board_table.item(i, 0)
+        for i in range(self.view_ksh_03_material.board_table.rowCount()):
+            item = self.view_ksh_03_material.board_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)            
     #---------------------------------------------------------------
     #---------------------------------------------------------------
