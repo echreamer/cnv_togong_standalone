@@ -1,27 +1,69 @@
-from sklearn.linear_model import LinearRegression
+import ezdxf
+import math
+import json
+ 
+## 특정 좌표점과 가장 가까운 텍스트의 값 추출 함수
+def find_nearest_text(msp, target_x, target_y):
+    
+    # 가장 가까운 텍스트와 거리를 저장할 변수 초기화
+    nearest_text = None
+    min_distance = float('inf')
 
-# 첫 번째 지층면 데이터
-topo_xyzs = [(1,1,10),(1,2,11),(1,3,10),(1,4,15),(1,5,9),(2,1,11),(2,2,13),(2,3,20),(2,4,15),(2,5,10),(3,1,30),(3,2,10),(3,3,15),(3,4,16),(3,5,13),(4,1,30),(4,2,10),(4,3,15),(4,4,16),(4,5,13),(5,1,33),(5,2,10),(5,3,11),(5,4,13),(5,5,10)]
+    # 모든 텍스트 개체 순회
+    for text in msp.query('TEXT'):
+        text_x, text_y, _ = text.dxf.insert
+        # 거리 계산
+        distance = math.sqrt((text_x - target_x) ** 2 + (text_y - target_y) ** 2)
 
-# x, y 좌표 추출
-X_train = [(x, y) for x, y, _ in topo_xyzs]
+        # 가장 짧은 거리 업데이트
+        if distance < min_distance:
+            min_distance = distance
+            nearest_text = text.dxf.text
 
-# z 값 추출
-z_train = [z for _, _, z in topo_xyzs]
+    return nearest_text
 
-# 선형 회귀 모델 훈련
-model = LinearRegression()
-model.fit(X_train, z_train)
 
-# 두 번째 지층면 데이터
-point_xyzs = [(2,3.3,15),(3.2,5.3,10),(5.1,2.3,6)]
 
-# x, y 좌표 추출
-X_test = [(x, y) for x, y, _ in point_xyzs]
 
-# 두 번째 지층면 z 값 예측
-z_pred = model.predict(X_test)
 
-# 결과 출력
-for i in range(len(point_xyzs)):
-    print(f"두 번째 지층면 좌표: {point_xyzs[i]}, 예측된 z 값: {z_pred[i]}")
+# 사용 예시
+## dxf파일 로드
+dxf_file = 'data/C00-100 현황측량도.dxf'
+
+doc = ezdxf.readfile(dxf_file)
+msp = doc.modelspace()
+
+# 중복을 제거하기 위한 집합
+unique_coordinates = set()
+
+current_level_layer = 'point-1'
+# 지정된 레이어의 모든 객체를 순회
+for entity in msp.query(f'*[layer=="{current_level_layer}"]'):
+    if entity.dxftype() == 'LINE':
+        # 선의 시작점과 끝점 좌표 추출
+        start = entity.dxf.start
+        end = entity.dxf.end
+                
+        # 중심점 좌표 계산
+        center = ((start.x + end.x) / 2, (start.y + end.y) / 2, float(find_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2)))
+        
+        unique_coordinates.add(center)
+    elif entity.dxftype() == 'POINT':
+    # 점의 좌표 추출
+        point = (entity.dxf.location.x, entity.dxf.location.y, float(find_nearest_text(msp,entity.dxf.location.x,entity.dxf.location.y)))
+        unique_coordinates.add(point)
+
+    elif entity.dxftype() == 'INSERT':
+    # 삽입점 좌표 추출
+        insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,float(find_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)))
+        unique_coordinates.add(insertion_point)
+
+    # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
+# 보링점 찾아서 넣을것임
+
+
+
+# 집합을 출력
+unique_coordinates_list = list(unique_coordinates)
+print(unique_coordinates_list)
+
