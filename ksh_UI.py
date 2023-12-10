@@ -303,11 +303,12 @@ class MainWindow(QMainWindow):
     # '현황측량도'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_topo_widget(self,layerList):
         print(layerList)
-        rowCount = 2
+        rowCount = 3
         self.view_layer_selection.topo_table.setRowCount(rowCount)
         self.view_layer_selection.topo_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
         self.view_layer_selection.topo_table.setItem(1,0, QTableWidgetItem("대지경계선"))
-
+        self.view_layer_selection.topo_table.setItem(2,0, QTableWidgetItem("보링점"))
+        
         for i in range(self.view_layer_selection.topo_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
