@@ -38,12 +38,12 @@ class ksh_02_digging(QWidget):
         # 그룹박스 생성
         vbox.addWidget(self.Group1())
         vbox.addWidget(self.Group2())
+        vbox.addWidget(self.Group3())
 
         # 버튼 생성
         self.digging_btn = CNV_Button('터파기 작성')
         vbox.addWidget(self.digging_btn)
         
-        vbox.addWidget(self.Group3())
 
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
     def Group1(self):
