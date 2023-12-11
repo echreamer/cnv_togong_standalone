@@ -22,6 +22,7 @@ class ksh_01_topo(QWidget):
         QWidget.__init__(self)
         self.initUI()  # initUI 메서드 호출
         
+        self.new_group_count = 1
         self.vbox = QVBoxLayout() 
         
     def initUI(self):
@@ -41,19 +42,8 @@ class ksh_01_topo(QWidget):
         # 그룹박스 생성
         vbox.addWidget(self.Group1())
         vbox.addWidget(self.Group2())
-       
-        # 버튼 생성
-        self.topo_btn = CNV_Button('현황 지형 작성')
-        vbox.addWidget(self.topo_btn)
-        
         vbox.addWidget(self.Group3())
-        
-        # 버튼 생성
-        self.stratum_btn = CNV_Button('지층 생성')
-        self.stratum_btn.clicked.connect(self.addBoringPoint)        
-        vbox.addWidget(self.stratum_btn)
-        
-        
+
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
     def Group1(self):
         groupbox = CNV_GroupBox()
@@ -68,12 +58,14 @@ class ksh_01_topo(QWidget):
         # 파일 경로 라벨 생성
         self.file_path_label_1 = CNV_Label("파일 경로:")
         vbox.addWidget(self.file_path_label_1)
+     
         
         return groupbox
     
     #그룹박스 - 지형 --------------------------------------------------------------------------   
     def Group2(self):
         groupbox = CNV_GroupBox()
+        groupbox.setFixedHeight(250)        
         
         vbox = QVBoxLayout()
         groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
@@ -81,8 +73,10 @@ class ksh_01_topo(QWidget):
         # '지형'테이블 위젯 생성--------------------
         self.topo_table = CNV_TableWidget()
         self.topo_table.setColumnCount(2)
+
         self.topo_table.setHorizontalHeaderItem(0, QTableWidgetItem("구분_"))
         self.topo_table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택_"))
+
             
         # 행의 헤더 숨기기
         header = self.topo_table.verticalHeader()
@@ -92,86 +86,105 @@ class ksh_01_topo(QWidget):
         self.topo_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
         vbox.addWidget(self.topo_table)
 
+       
+        # 버튼 생성
+        self.topo_btn = CNV_Button('지형 작성')
+        vbox.addWidget(self.topo_btn)
+          
         return groupbox
 
     #그룹박스 - 보링점 ------------------------------------------------------------------ ----
     def Group3(self):
-        groupbox3 = CNV_GroupBox()
+        groupbox = CNV_GroupBox()
         
         vbox = QVBoxLayout()
-        groupbox3.setLayout(vbox)  # 그룹박스에 레이아웃 설정
+        groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
+        
+
+        # 탭뷰 생성
+        tabs = CNV_TabWidget()
+        tabs.addTab(QWidget(), '사용자 입력')
+        tabs.addTab(QWidget(), '결과')  # 빈 탭 추가
+        vbox.addWidget(tabs)
+        
+        tab1 = tabs.widget(0)
+        tab1_layout = QVBoxLayout(tab1)
+        
+        # 공간 확보
+        spacer = QSpacerItem(10, 10, QSizePolicy.Fixed, QSizePolicy.Fixed)
+        tab1_layout.addSpacerItem(spacer)   
 
         # 버튼 생성
-        self.boring_point_add_btn = CNV_Button('보링점 추가')
-        self.boring_point_add_btn.clicked.connect(self.addBoringPoint)        
-        vbox.addWidget(self.boring_point_add_btn)
+        btn = CNV_Button('보링점 추가')
+        btn.clicked.connect(self.addBoringPoint)        
+        tab1_layout.addWidget(btn)
+
+        # 스크롤 가능한 영역 생성
+        self.scroll_area = CNV_ScrollArea()
+        self.scroll_area.setWidgetResizable(True)  # 스크롤 영역 크기 자동 조절 설정
+        tab1_layout.addWidget(self.scroll_area)
         
-        # 탭뷰 생성
-        self.tabs = CNV_TabWidget()
-        vbox.addWidget(self.tabs)
+        # 그룹박스들을 담을 위젯 생성
+        self.scroll_content = QWidget()
+        layout = QVBoxLayout(self.scroll_content)  # 수직 레이아웃 설정
+        layout.setAlignment(Qt.AlignTop)  # 위쪽 정렬
         
-        hbox = QHBoxLayout()
-        vbox.addLayout(hbox)
+        # 그룹박스들을 스크롤 가능한 영역에 추가
+        self.scroll_area.setWidget(self.scroll_content)
         
-        # 체크박스(지층레벨 예측을 위한 알고리즘 선택)
-        self.check_line = CNV_CheckBox("선형보간")
-        self.check_line.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
-        hbox.addWidget(self.check_line)
-        
-        self.check_spline = CNV_CheckBox("스플라인보간")
-        self.check_spline.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
-        hbox.addWidget(self.check_spline)
-        
-        self.check_k = CNV_CheckBox("K-최근점이웃(KNN)")
-        self.check_k.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
-        hbox.addWidget(self.check_k)
-        
-        return groupbox3
+        return groupbox
    
     #새로운 보링점 추가 --------------------------------------
-    
-    
     def addBoringPoint(self):
-        new_tab = QWidget()  # 새로운 탭 생성
-        self.tabs.addTab(new_tab, f'NX-{self.tabs.count() + 1}')  # 탭 추가 및 이름 설정
+        # 새로운 보링점 그룹 생성 및 레이아웃 추가
+        new_group = self.createBoringPointGroup()
+        self.scroll_content.layout().addWidget(new_group)
+        self.new_group_count += 1  # 그룹이 추가될 때마다 숫자 증가        
+
+    def createBoringPointGroup(self):
+        # '그룹1'과 같은 구조의 그룹 생성하는 함수
+        groupbox = CNV_GroupBox()
+        main_vbox = QVBoxLayout()
+        groupbox.setLayout(main_vbox)
         
-        if self.tabs.count() > 1:  # 첫 번째 탭 이후에만 버튼 추가
-            index = self.tabs.count() - 1  # 새로운 탭의 인덱스
-            self.addCloseButton(index)                 
+        hbox = QHBoxLayout()        
+        
+        lb_text = f'LX-{self.new_group_count}'
+        lb = CNV_TitleLabel(lb_text)  # 보링점 제목 변경 가능
+        hbox.addWidget(lb)
+        
+        # 각 그룹에 종료 버튼 추가
+        close_btn = CNV_CloseButton('X')  # 닫기 버튼 생성
+        close_btn.clicked.connect(lambda: self.closeBoringPointGroup(groupbox))  # 클릭 시 그룹 닫기
+        hbox.addWidget(close_btn)  # 그룹 박스에 버튼 추가
+        main_vbox.addLayout(hbox)  # 메인 레이아웃에 수평 레이아웃 추가        
+       
+        tableWidget = CNV_TableWidget()
+        tableWidget.setRowCount(8)
+        tableWidget.setColumnCount(2)
+        tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
+        tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
 
-        # 탭에 위젯 배치
-        tab_layout = QVBoxLayout(new_tab)
-        NX_table = CNV_TableWidget()
-        NX_table.setRowCount(8)
-        NX_table.setColumnCount(2)
-        NX_table.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
-        NX_table.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
-
-        # 각 행에 콤보박스 추가
-        for i in range(NX_table.rowCount()):
+        for i in range(tableWidget.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
-            NX_table.setCellWidget(i, 0, combo)
-
-        header = NX_table.verticalHeader()
-        header.hide()
-        NX_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
-        tab_layout.addWidget(NX_table)    
+            tableWidget.setCellWidget(i, 0, combo)
+            
+        header = tableWidget.verticalHeader()
+        header.hide()       
+        tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
+        main_vbox.addWidget(tableWidget)
         
-    def addCloseButton(self, index):
-        # 탭의 index에 해당하는 위치에 닫기 버튼 추가
-        close_btn = CNV_CloseButton('X')
-        close_btn.clicked.connect(lambda _, idx=index: self.closeTab(idx))  # 클릭 시 탭 닫기
-        self.tabs.tabBar().setTabButton(index, QTabBar.RightSide, close_btn)  # 오른쪽에 버튼 추가
+        return groupbox
 
-    def closeTab(self, index):
-        if index != -1:
-            self.tabs.removeTab(index)  # 선택한 탭 닫기
+    def closeBoringPointGroup(self, groupbox):
+        # 선택한 그룹을 레이아웃에서 제거하고 삭제
+        self.vbox.removeWidget(groupbox)
+        groupbox.deleteLater()
+         
+        return groupbox 
 
-            # 삭제된 탭 이후의 탭들에 대해 닫기 버튼 재설정
-            for i in range(self.tabs.count()):
-                self.addCloseButton(i)
+
 
 if __name__ == '__main__':
     app = 0

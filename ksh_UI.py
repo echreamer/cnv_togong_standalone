@@ -577,13 +577,18 @@ class MainWindow(QMainWindow):
 
      # 지층높이 결정 메소드
     def action_generate_stratum(self):
-        for gbox in self.view_ksh_01_topo.scroll_content.children():
-            print(gbox.main_vbox.itemAt(0).cellWidget(0,0).currentText())
 
-
-
-
-
+        for i in range(self.view_ksh_01_topo.tabs.count()):
+            print(self.view_ksh_01_topo.tabs.widget(i).children()[1].rowCount())
+            for j in range(self.view_ksh_01_topo.tabs.widget(i).children()[1].rowCount()):
+                try:
+                    print(self.view_ksh_01_topo.tabs.widget(i).children()[1].cellWidget(j,0).currentText())
+                except:
+                    print("-")
+                try:
+                    print(self.view_ksh_01_topo.tabs.widget(i).children()[1].cellWidget(j,1).currentText())
+                except:
+                    print(0)
 
 
 
