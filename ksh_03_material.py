@@ -217,11 +217,11 @@ class ksh_03_material(QWidget):
         button_layout = QHBoxLayout()
         
         # 버튼 생성
-        add_btn = CNV_Button('+')
+        add_btn = CNV_Button('행 추가')
         add_btn.clicked.connect(self.addRow)
         button_layout.addWidget(add_btn)
         
-        delete_btn = CNV_Button('-')
+        delete_btn = CNV_Button('행 삭제')
         delete_btn.clicked.connect(self.deleteRow) 
         button_layout.addWidget(delete_btn)
         

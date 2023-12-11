@@ -21,8 +21,10 @@ class ksh_01_topo(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.initUI()  # initUI 메서드 호출
-        
         self.vbox = QVBoxLayout() 
+        self.undo_stack = []
+        self.redo_stack = []
+        self.current_tab = None
         
     def initUI(self):
         
@@ -133,15 +135,13 @@ class ksh_01_topo(QWidget):
     
     def addBoringPoint(self):
         new_tab = QWidget()  # 새로운 탭 생성
-        self.tabs.addTab(new_tab, f'NX-{self.tabs.count() + 1}')  # 탭 추가 및 이름 설정
+        self.tabs.addTab(new_tab, f'{self.tabs.count() + 1}')  # 탭 추가 및 이름 설정
+        self.current_tab = new_tab
         
-        if self.tabs.count() > 1:  # 첫 번째 탭 이후에만 버튼 추가
-            index = self.tabs.count() - 1  # 새로운 탭의 인덱스
-            self.addCloseButton(index)                 
-
         # 탭에 위젯 배치
         tab_layout = QVBoxLayout(new_tab)
         
+        # 보링점 정보 입력칸
         hbox = QHBoxLayout()
         tab_layout.addLayout(hbox)  # 수평 레이아웃을 수직 레이아웃에 추가
 
@@ -173,31 +173,116 @@ class ksh_01_topo(QWidget):
         z_input.setText('9')
         
         
-        
-        
-        
-        
+        # 테이블 배치
         NX_table = CNV_TableWidget()
-        NX_table.setRowCount(8)
+        NX_table.setRowCount(0)
         NX_table.setColumnCount(2)
         NX_table.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
         NX_table.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
-
-
-
-        # 각 행에 콤보박스 추가
-        for i in range(NX_table.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
-            NX_table.setCellWidget(i, 0, combo)
 
         header = NX_table.verticalHeader()
         header.hide()
         NX_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-
         tab_layout.addWidget(NX_table)    
+
+        hbox_2 = QHBoxLayout()
+        tab_layout.addLayout(hbox_2)
+
+        # 테이블 행 추가 버튼 추가
+        self.row_add_btn = CNV_Button('행 추가')
+        self.row_add_btn.clicked.connect(self.addRow)
+        hbox_2.addWidget(self.row_add_btn)
+
+        # 테이블 행 추가 버튼 추가
+        self.row_delete_btn = CNV_Button('행 삭제')
+        self.row_delete_btn.clicked.connect(self.deleteRow)
+        hbox_2.addWidget(self.row_delete_btn)
+            
+    def addRow(self):
+        current_tab_index = self.tabs.currentIndex()
+        self.current_tab = self.tabs.widget(current_tab_index)
+        if self.current_tab:
+            # 현재 탭에서 NX_table 찾기
+            nx_table = self.current_tab.findChild(CNV_TableWidget)
+            if nx_table:
+                currentRowCount = nx_table.rowCount()
+                nx_table.setRowCount(currentRowCount + 1)
+                
+                # 새로운 행에 콤보박스 추가
+                combo = CNV_ComboBox()
+                combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
+                nx_table.setCellWidget(currentRowCount, 0, combo)
+                
+        # 수행된 동작을 스택에 저장
+        self.undo_stack.append(('add', self.current_tab, currentRowCount, self.saveComboData(self.current_tab, currentRowCount), self.saveComboCurrentIndex(self.current_tab, currentRowCount)))
+        # 추가된 데이터를 임시 저장하는 스택
+        self.redo_stack.clear()
         
+    def deleteRow(self):
+        current_tab_index = self.tabs.currentIndex()
+        self.current_tab = self.tabs.widget(current_tab_index)
+        if self.current_tab:
+            nx_table = self.current_tab.findChild(CNV_TableWidget)
+            if nx_table:
+                selected_row = nx_table.currentRow()
+                if selected_row >= 0:
+                    # 저장할 데이터 가져오기
+                    combo_data = self.saveComboData(self.current_tab, selected_row)
+                    combo_current_index = self.saveComboCurrentIndex(self.current_tab, selected_row)
+                    
+                    # 삭제된 데이터 및 콤보박스 정보를 스택에 저장
+                    self.undo_stack.append(('delete', self.current_tab, selected_row, combo_data, combo_current_index))
+                    
+                    # 행 삭제
+                    nx_table.removeRow(selected_row)
+                    
+                    # 삭제된 데이터를 임시 저장하는 스택은 비워두기
+                    self.redo_stack.clear()
+
+
+    def undoLastAction(self):
+        if self.undo_stack:
+            action, tab, data, combo_data, combo_current_index = self.undo_stack.pop()  # 가장 최근 동작을 팝하여 실행 취소
+
+            if action == 'add':
+                tab.findChild(CNV_TableWidget).removeRow(data)  # 'add' 동작 실행 취소
+            elif action == 'delete':
+                # 'delete' 동작 실행 취소
+                tab.findChild(CNV_TableWidget).insertRow(data)
+                # 삭제된 데이터 복원 (콤보박스 추가 및 선택된 항목 복원)
+                combo = CNV_ComboBox()
+                combo.addItems(["매립층", "퇴적층(실트)", "퇴적층(모래)", "퇴적층(자갈)", "풍화토", "풍화암", "보통암", "경암"])
+                tab.findChild(CNV_TableWidget).setCellWidget(data, 0, combo)
+                combo.setCurrentIndex(combo_data)
+                if combo_current_index is not None:  # 선택된 인덱스가 존재할 때만 설정
+                    combo.setCurrentIndex(combo_current_index)
+
+    def saveComboData(self, tab, row):
+        if tab:
+            nx_table = tab.findChild(CNV_TableWidget)
+            if nx_table:
+                combo = nx_table.cellWidget(row, 0)
+                if combo:
+                    return combo.currentIndex()
+        return 0  # 기본값은 0으로 설정하거나 필요에 따라 다른 값을 반환하도록 설정 가능
+
+    def saveComboCurrentIndex(self, tab, row):
+        if tab:
+            nx_table = tab.findChild(CNV_TableWidget)
+            if nx_table:
+                combo = nx_table.cellWidget(row, 0)
+                if combo:
+                    return combo.currentIndex()
+        return None 
+
+    # 'Ctrl + Z'를 눌렀을 때 undoLastAction() 메서드를 실행하도록 설정
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier:
+            self.undoLastAction()
+        else:
+            super().keyPressEvent(event)                
+
     def addCloseButton(self, index):
         # 탭의 index에 해당하는 위치에 닫기 버튼 추가
         close_btn = CNV_CloseButton('X')
