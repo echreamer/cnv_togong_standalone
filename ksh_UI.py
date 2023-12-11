@@ -325,18 +325,18 @@ class MainWindow(QMainWindow):
     def input_dxf_layer_digging_widget(self,layerList):
         print(layerList)
         rowCount = 2
-        self.view_ksh_02_digging.digging_table.setRowCount(rowCount)
-        self.view_ksh_02_digging.digging_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_ksh_02_digging.digging_table.setItem(1,0, QTableWidgetItem("대지경계선"))
+        self.view_ksh_01_topo.digging_table.setRowCount(rowCount)
+        self.view_ksh_01_topo.digging_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
+        self.view_ksh_01_topo.digging_table.setItem(1,0, QTableWidgetItem("대지경계선"))
 
-        for i in range(self.view_ksh_02_digging.digging_table.rowCount()):
+        for i in range(self.view_ksh_01_topo.digging_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_ksh_02_digging.digging_table.setCellWidget(i, 1, combo)
+            self.view_ksh_01_topo.digging_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_ksh_02_digging.digging_table.rowCount()):
-            item = self.view_ksh_02_digging.digging_table.item(i, 0)
+        for i in range(self.view_ksh_01_topo.digging_table.rowCount()):
+            item = self.view_ksh_01_topo.digging_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
             
     # '파일'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
