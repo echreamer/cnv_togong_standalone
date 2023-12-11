@@ -142,6 +142,7 @@ class ksh_01_topo(QWidget):
         # 탭에 위젯 배치
         tab_layout = QVBoxLayout(new_tab)
         
+        # 보링점 정보 입력칸
         hbox = QHBoxLayout()
         tab_layout.addLayout(hbox)  # 수평 레이아웃을 수직 레이아웃에 추가
 
