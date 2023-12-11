@@ -22,9 +22,17 @@ class ksh_03_material(QWidget):
         QWidget.__init__(self)
         self.initUI()  # initUI 메서드 호출
     def initUI(self):
-        
+
+        vbox = QVBoxLayout()
+        self.setLayout(vbox)
+
         hbox = QHBoxLayout()
-        self.setLayout(hbox)
+        vbox.addLayout(hbox)
+       
+        # 버튼 생성
+        self.material_btn = CNV_Button('부재 작성')
+        vbox.addWidget(self.material_btn)
+        
         
         ## 레이아웃 - 왼쪽 ----------------------------------------------------------------------------------
         vbox_1 = QVBoxLayout()
@@ -42,7 +50,8 @@ class ksh_03_material(QWidget):
         vbox_2.addWidget(self.Group4())
         vbox_2.addWidget(self.Group5())
         vbox_2.addWidget(self.Group6())
-        
+
+
 
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
     def Group1(self):
