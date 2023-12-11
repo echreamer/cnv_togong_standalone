@@ -41,7 +41,18 @@ class ksh_01_topo(QWidget):
         # 그룹박스 생성
         vbox.addWidget(self.Group1())
         vbox.addWidget(self.Group2())
+       
+        # 버튼 생성
+        self.topo_btn = CNV_Button('현황 지형 작성')
+        vbox.addWidget(self.topo_btn)
+        
         vbox.addWidget(self.Group3())
+        
+        # 버튼 생성
+        self.stratum_btn = CNV_Button('지층 생성')
+        self.stratum_btn.clicked.connect(self.addBoringPoint)        
+        vbox.addWidget(self.stratum_btn)
+        
         
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
     def Group1(self):
@@ -57,7 +68,6 @@ class ksh_01_topo(QWidget):
         # 파일 경로 라벨 생성
         self.file_path_label_1 = CNV_Label("파일 경로:")
         vbox.addWidget(self.file_path_label_1)
-     
         
         return groupbox
     
@@ -82,11 +92,6 @@ class ksh_01_topo(QWidget):
         self.topo_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch) 
         vbox.addWidget(self.topo_table)
 
-       
-        # 버튼 생성
-        self.topo_btn = CNV_Button('현황 지형 작성')
-        vbox.addWidget(self.topo_btn)
-          
         return groupbox
 
     #그룹박스 - 보링점 ------------------------------------------------------------------ ----
@@ -120,11 +125,6 @@ class ksh_01_topo(QWidget):
         self.check_k = CNV_CheckBox("K-최근점이웃(KNN)")
         self.check_k.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
         hbox.addWidget(self.check_k)
-        
-        # 버튼 생성
-        self.stratum_btn = CNV_Button('지층 생성')
-        self.stratum_btn.clicked.connect(self.addBoringPoint)        
-        vbox.addWidget(self.stratum_btn)
         
         return groupbox
    
