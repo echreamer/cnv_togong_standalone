@@ -147,27 +147,31 @@ class ksh_01_topo(QWidget):
 
         name_lb = CNV_Label('이름 : ')
         hbox.addWidget(name_lb)
-
+        
         name_input = QLineEdit()
         hbox.addWidget(name_input)
-        
+        name_input.setText('boring-1')
+
         x_lb = CNV_Label('X : ')
         hbox.addWidget(x_lb)
 
         x_input = QLineEdit()
         hbox.addWidget(x_input)
+        x_input.setText('345345.3445')
 
         y_lb = CNV_Label('Y : ')
         hbox.addWidget(y_lb)
 
         y_input = QLineEdit()
         hbox.addWidget(y_input)
-
+        y_input.setText('541535.3435')
         z_lb = CNV_Label('Z : ')
         hbox.addWidget(z_lb)
 
         z_input = QLineEdit()
         hbox.addWidget(z_input)
+        z_input.setText('9')
+        
         
         
         
