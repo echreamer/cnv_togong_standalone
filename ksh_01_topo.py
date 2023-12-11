@@ -141,11 +141,45 @@ class ksh_01_topo(QWidget):
 
         # 탭에 위젯 배치
         tab_layout = QVBoxLayout(new_tab)
+        
+        hbox = QHBoxLayout()
+        tab_layout.addLayout(hbox)  # 수평 레이아웃을 수직 레이아웃에 추가
+
+        name_lb = CNV_Label('이름 : ')
+        hbox.addWidget(name_lb)
+
+        name_input = QLineEdit()
+        hbox.addWidget(name_input)
+        
+        x_lb = CNV_Label('X : ')
+        hbox.addWidget(x_lb)
+
+        x_input = QLineEdit()
+        hbox.addWidget(x_input)
+
+        y_lb = CNV_Label('Y : ')
+        hbox.addWidget(y_lb)
+
+        y_input = QLineEdit()
+        hbox.addWidget(y_input)
+
+        z_lb = CNV_Label('Z : ')
+        hbox.addWidget(z_lb)
+
+        z_input = QLineEdit()
+        hbox.addWidget(z_input)
+        
+        
+        
+        
+        
         NX_table = CNV_TableWidget()
         NX_table.setRowCount(8)
         NX_table.setColumnCount(2)
         NX_table.setHorizontalHeaderItem(0, QTableWidgetItem("지층"))
         NX_table.setHorizontalHeaderItem(1, QTableWidgetItem("층후(M)"))
+
+
 
         # 각 행에 콤보박스 추가
         for i in range(NX_table.rowCount()):
@@ -156,6 +190,7 @@ class ksh_01_topo(QWidget):
         header = NX_table.verticalHeader()
         header.hide()
         NX_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
 
         tab_layout.addWidget(NX_table)    
         
