@@ -42,7 +42,7 @@ class ksh_01_topo(QWidget):
         vbox.addWidget(self.Group1())
         vbox.addWidget(self.Group2())
         vbox.addWidget(self.Group3())
-
+        
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
     def Group1(self):
         groupbox = CNV_GroupBox()
@@ -84,7 +84,7 @@ class ksh_01_topo(QWidget):
 
        
         # 버튼 생성
-        self.topo_btn = CNV_Button('지형 작성')
+        self.topo_btn = CNV_Button('현황 지형 작성')
         vbox.addWidget(self.topo_btn)
           
         return groupbox
@@ -97,14 +97,34 @@ class ksh_01_topo(QWidget):
         groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
 
         # 버튼 생성
-        btn = CNV_Button('보링점 추가')
-        btn.clicked.connect(self.addBoringPoint)        
-        vbox.addWidget(btn)
+        self.boring_point_add_btn = CNV_Button('보링점 추가')
+        self.boring_point_add_btn.clicked.connect(self.addBoringPoint)        
+        vbox.addWidget(self.boring_point_add_btn)
         
         # 탭뷰 생성
         self.tabs = CNV_TabWidget()
         vbox.addWidget(self.tabs)
         
+        hbox = QHBoxLayout()
+        vbox.addLayout(hbox)
+        
+        # 체크박스(지층레벨 예측을 위한 알고리즘 선택)
+        self.check_line = CNV_CheckBox("선형보간")
+        self.check_line.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
+        hbox.addWidget(self.check_line)
+        
+        self.check_spline = CNV_CheckBox("스플라인보간")
+        self.check_spline.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
+        hbox.addWidget(self.check_spline)
+        
+        self.check_k = CNV_CheckBox("K-최근점이웃(KNN)")
+        self.check_k.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
+        hbox.addWidget(self.check_k)
+        
+        # 버튼 생성
+        self.stratum_btn = CNV_Button('지층 생성')
+        self.stratum_btn.clicked.connect(self.addBoringPoint)        
+        vbox.addWidget(self.stratum_btn)
         
         return groupbox
    
