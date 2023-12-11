@@ -224,19 +224,22 @@ class ksh_03_material(QWidget):
         table1.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         table1.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         table1.setColumnWidth(2, 10)  # 세 번째 열의 너비를 100으로 설정 (조절 가능)
+        
+        self.group3_box = groupbox        
+        
         return groupbox
     
     
     # '추가' 버튼 클릭 시 호출되는 메서드
     def addRow(self):
         
-        table1 = self.group1_box.findChild(QTableWidget)
+        table1 = self.group3_box.findChild(QTableWidget)
         if table1 is not None:
             currentRowCount = table1.rowCount()
             table1.setRowCount(currentRowCount + 1)
 
     def deleteRow(self, row):
-        table1 = self.group1_box.findChild(QTableWidget)
+        table1 = self.group3_box.findChild(QTableWidget)
         if table1 is not None:
             table1.removeRow(row)    
 
@@ -269,11 +272,6 @@ class ksh_03_material(QWidget):
         table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
         table.setHorizontalHeaderItem(1, QTableWidgetItem("사이즈"))
 
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(table.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["Option 1", "Option 2", "Option 3"])
-            table.setCellWidget(i, 1, combo)
             
         # 행의 헤더 숨기기
         header = table.verticalHeader()
@@ -325,11 +323,6 @@ class ksh_03_material(QWidget):
         table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
         table.setHorizontalHeaderItem(1, QTableWidgetItem("사이즈"))
 
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(table.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["Option 1", "Option 2", "Option 3"])
-            table.setCellWidget(i, 1, combo)
             
         # 행의 헤더 숨기기
         header = table.verticalHeader()
@@ -381,12 +374,6 @@ class ksh_03_material(QWidget):
         table.setHorizontalHeaderItem(0, QTableWidgetItem("부재"))
         table.setHorizontalHeaderItem(1, QTableWidgetItem("사이즈"))
 
-        # 첫 번째 열에 콤보박스 추가
-        for i in range(table.rowCount()):
-            combo = CNV_ComboBox()
-            combo.addItems(["Option 1", "Option 2", "Option 3"])
-            table.setCellWidget(i, 1, combo)
-            
         # 행의 헤더 숨기기
         header = table.verticalHeader()
         header.hide()       
