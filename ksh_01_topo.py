@@ -103,9 +103,11 @@ class ksh_01_topo(QWidget):
         vbox = QVBoxLayout()
         groupbox3.setLayout(vbox)  # 그룹박스에 레이아웃 설정
 
-        # 버튼 생성
+        # 버튼 생성SS
         self.boring_point_add_btn = CNV_Button('보링점 추가')
-        self.boring_point_add_btn.clicked.connect(self.addBoringPoint)        
+        self.boring_point_add_btn.clicked.connect(lambda: self.addBoringPoint("","","",""))        
+
+        # close_btn.clicked.connect(lambda _, idx=index: self.closeTab(idx))
         vbox.addWidget(self.boring_point_add_btn)
         
         # 탭뷰 생성
@@ -133,7 +135,7 @@ class ksh_01_topo(QWidget):
     #새로운 보링점 추가 --------------------------------------
     
     
-    def addBoringPoint(self):
+    def addBoringPoint(self,name,x,y,z):
         new_tab = QWidget()  # 새로운 탭 생성
         self.tabs.addTab(new_tab, f'{self.tabs.count() + 1}')  # 탭 추가 및 이름 설정
         self.current_tab = new_tab
@@ -150,27 +152,28 @@ class ksh_01_topo(QWidget):
         
         name_input = QLineEdit()
         hbox.addWidget(name_input)
-        name_input.setText('boring-1')
+        name_input.setText(name)
 
         x_lb = CNV_Label('X : ')
         hbox.addWidget(x_lb)
 
         x_input = QLineEdit()
         hbox.addWidget(x_input)
-        x_input.setText('345345.3445')
+        x_input.setText(x)
 
         y_lb = CNV_Label('Y : ')
         hbox.addWidget(y_lb)
 
         y_input = QLineEdit()
         hbox.addWidget(y_input)
-        y_input.setText('541535.3435')
+        y_input.setText(y)
+
         z_lb = CNV_Label('Z : ')
         hbox.addWidget(z_lb)
 
         z_input = QLineEdit()
         hbox.addWidget(z_input)
-        z_input.setText('9')
+        z_input.setText(z)
         
         
         # 테이블 배치

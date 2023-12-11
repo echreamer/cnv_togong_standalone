@@ -61,6 +61,25 @@ def find_nearest_text(msp, target_x, target_y):
             nearest_text = text.dxf.text
 
     return nearest_text
+import math
+# 두번째로 가까운 텍스트를 찾는 코드
+def find_second_nearest_text(msp, target_x, target_y):
+    # 텍스트와 거리를 저장할 리스트 초기화
+    distances = []
+
+    # 모든 텍스트 개체 순회
+    for text in msp.query('TEXT'):
+        text_x, text_y, _ = text.dxf.insert
+        # 거리 계산
+        distance = math.sqrt((text_x - target_x) ** 2 + (text_y - target_y) ** 2)
+        # 거리와 텍스트 저장
+        distances.append((distance, text.dxf.text))
+
+    # 거리에 따라 정렬
+    distances.sort()
+
+    # 두 번째로 가까운 텍스트 반환 (리스트에 최소 두 개의 요소가 있어야 함)
+    return distances[1][1] if len(distances) > 1 else None
 
 class MainWindow(QMainWindow):
 
@@ -440,6 +459,8 @@ class MainWindow(QMainWindow):
         # 중복을 제거하기 위한 보링점 집합
         unique_boring = set()
         
+        # 보링점 이름의 리스트
+        boring_name_list = []
 
         # 지정된 레이어의 모든 객체를 순회
         for entity in msp.query(f'*[layer=="{current_level_layer}"]'):
@@ -480,6 +501,7 @@ class MainWindow(QMainWindow):
 
                 insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,point_z)
                 unique_coordinates.add(insertion_point)
+
             # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
 
         # 보링점 찾아서 넣을것임
@@ -490,42 +512,69 @@ class MainWindow(QMainWindow):
                 start = entity.dxf.start
                 end = entity.dxf.end
                 nearest_text = find_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2)   
+                second_text = find_second_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2) 
                 point_z =0
+                point_name = ''
                 try:
                     point_z = float(nearest_text)
-                except:
+                    point_name = second_text
+                except Exception as e:
+                    point_z = float(second_text)
+                    point_name = nearest_text
+                except Exception as e:
                     point_z = (start.z+end.z)/2
+                    point_name = ''
                        
                 # 중심점 좌표 계산
                 center = ((start.x + end.x) / 2, (start.y + end.y) / 2, point_z)
                 unique_boring.add(center)
                 unique_coordinates.add(center)
+                boring_name_list.append(point_name)
+
 
             elif entity.dxftype() == 'POINT':
             # 점의 좌표 추출
                 nearest_text = find_nearest_text(msp,entity.dxf.location.x, entity.dxf.location.y)   
+                second_text = find_second_nearest_text(msp,entity.dxf.location.x, entity.dxf.location.y)
                 point_z =0
+                point_name = ''
                 try:
                     point_z = float(nearest_text)
+                    point_name = second_text
+                except Exception as e:
+                    point_z = float(second_text)
+                    point_name = nearest_text
                 except:
                     point_z = entity.dxf.location.z
+                    point_name = ''
+
+
                 point = (entity.dxf.location.x, entity.dxf.location.y, point_z)
                 unique_boring.add(point)
                 unique_coordinates.add(point)
+                boring_name_list.append(point_name)
 
 
             elif entity.dxftype() == 'INSERT':
             # 삽입점 좌표 추출
                 nearest_text = find_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)   
+                second_text = find_second_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)
                 point_z = 0
+                point_name = ''
                 try:
                     point_z = float(nearest_text)
+                    point_name = second_text
+                except Exception as e:
+                    point_z = float(second_text)
+                    point_name = nearest_text
                 except:
                     point_z = entity.dxf.insert.x
+                    point_name = ''
 
                 insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,point_z)
                 unique_boring.add(insertion_point)
                 unique_coordinates.add(insertion_point)
+                boring_name_list.append(point_name)
 
             # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
 
@@ -535,8 +584,13 @@ class MainWindow(QMainWindow):
 
         print(top_coordinates_list)
         print(top_boring_list)
+
+        i = 0
         for xyz in top_boring_list:
-            self.view_ksh_01_topo.addBoringPoint()
+
+            self.view_ksh_01_topo.addBoringPoint(boring_name_list[i],str(xyz[0]),str(xyz[1]),str(xyz[2]))
+            i = i+1
+
 
         
         
