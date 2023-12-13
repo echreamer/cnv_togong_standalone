@@ -63,7 +63,7 @@ class ksh_03_material(QWidget):
         
         # 파일 경로 라벨 생성
         self.file_path_label_3 = CNV_Label("파일 경로:")
-        self.file_path_label_3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.file_path_label_3.setWordWrap(True)
         vbox.addWidget(self.file_path_label_3)
      
         
@@ -400,17 +400,3 @@ class ksh_03_material(QWidget):
 
         return groupbox
     
-if __name__ == '__main__':
-    app = 0
-    if QApplication.instance():
-        app = QApplication.instance()
-    else:
-        app = QApplication(sys.argv)
-
-    w = ksh_03_material()
-    w.resize(600, 800)
-    filename = sys.argv[1]
-    if os.path.isfile(filename):
-        w.load_ifc_file(filename)
-        w.show()
-    sys.exit(app.exec_())
