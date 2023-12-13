@@ -2,6 +2,7 @@
 import os.path
 from IFCCustomDelegate import *
 
+
 from ksh_01_topo import *
 from ksh_02_digging import *
 from ksh_03_material import *
@@ -61,25 +62,6 @@ def find_nearest_text(msp, target_x, target_y):
             nearest_text = text.dxf.text
 
     return nearest_text
-import math
-# 두번째로 가까운 텍스트를 찾는 코드
-def find_second_nearest_text(msp, target_x, target_y):
-    # 텍스트와 거리를 저장할 리스트 초기화
-    distances = []
-
-    # 모든 텍스트 개체 순회
-    for text in msp.query('TEXT'):
-        text_x, text_y, _ = text.dxf.insert
-        # 거리 계산
-        distance = math.sqrt((text_x - target_x) ** 2 + (text_y - target_y) ** 2)
-        # 거리와 텍스트 저장
-        distances.append((distance, text.dxf.text))
-
-    # 거리에 따라 정렬
-    distances.sort()
-
-    # 두 번째로 가까운 텍스트 반환 (리스트에 최소 두 개의 요소가 있어야 함)
-    return distances[1][1] if len(distances) > 1 else None
 
 class MainWindow(QMainWindow):
 
@@ -135,11 +117,9 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.BottomDockWidgetArea, self.dock4)
         
         #dxf파일 열기 액션
-
-
-        self.view_ksh_01_topo.btn1.clicked.connect(self.action_dxf_open_click_1)
-        self.view_ksh_02_digging.btn2.clicked.connect(self.action_dxf_open_click_2)
-        self.view_ksh_03_material.btn3.clicked.connect(self.action_dxf_open_click_3)
+        self.view_ksh_01_topo.topo_file_import_btn.clicked.connect(self.action_dxf_open_click_1)
+        self.view_ksh_02_digging.digging_file_import_btn.clicked.connect(self.action_dxf_open_click_2)
+        self.view_ksh_03_material.material_file_import_btn.clicked.connect(self.action_dxf_open_click_3)
         
         
         #지형작성 액션
@@ -162,7 +142,7 @@ class MainWindow(QMainWindow):
 
         # 프로젝트 내보내기 --------------------------------------------------------------------------
         action_save = QAction("프로젝트 내보내기", self)
-        action_save.triggered.connect(self.action_generate_stratum)
+        action_save.triggered.connect(self.action_save_click)
         toolbar.addAction(action_save)        
         
         
@@ -258,7 +238,7 @@ class MainWindow(QMainWindow):
         self.dxf_2_layers=self.load_dxf_layers(doc_2)
         self.input_dxf_layer_digging_widget(self.dxf_2_layers)#콤보박스에 리스트업
 
-        self.view_ksh_01_topo.file_path_label_2.setText(f"파일 경로: {filename}")
+        self.view_ksh_02_digging.file_path_label_2.setText(f"파일 경로: {filename}")
         print(doc_2)
         print(self.dxf_2_layers)
         
@@ -288,9 +268,7 @@ class MainWindow(QMainWindow):
         self.input_dxf_layer_bracing_widget(self.dxf_3_layers)#콤보박스에 리스트업
         self.input_dxf_layer_board_widget(self.dxf_3_layers)#콤보박스에 리스트업
         
-        
-        
-        self.view_ksh_01_topo.file_path_label_3.setText(f"파일 경로: {filename}")
+        self.view_ksh_03_material.file_path_label_3.setText(f"파일 경로: {filename}")
         print(doc_3)
         print(self.dxf_3_layers)
         
@@ -343,19 +321,20 @@ class MainWindow(QMainWindow):
     # '터파기'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
     def input_dxf_layer_digging_widget(self,layerList):
         print(layerList)
-        rowCount = 2
-        self.view_ksh_01_topo.digging_table.setRowCount(rowCount)
-        self.view_ksh_01_topo.digging_table.setItem(0,0, QTableWidgetItem("지형 레벨 포인트"))
-        self.view_ksh_01_topo.digging_table.setItem(1,0, QTableWidgetItem("대지경계선"))
-
-        for i in range(self.view_ksh_01_topo.digging_table.rowCount()):
+        rowCount = 3
+        self.view_ksh_02_digging.digging_table.setRowCount(rowCount)
+        self.view_ksh_02_digging.digging_table.setItem(0,0, QTableWidgetItem("터파기"))
+        self.view_ksh_02_digging.digging_table.setItem(1,0, QTableWidgetItem("터파기(경사)"))
+        self.view_ksh_02_digging.digging_table.setItem(2,0, QTableWidgetItem("대지경계선"))
+        
+        for i in range(self.view_ksh_02_digging.digging_table.rowCount()):
             combo = CNV_ComboBox()
             combo.addItems(layerList)
-            self.view_ksh_01_topo.digging_table.setCellWidget(i, 1, combo)
+            self.view_ksh_02_digging.digging_table.setCellWidget(i, 1, combo)
         
         #첫 번째 열의 아이템 수정 불가능하게 설정
-        for i in range(self.view_ksh_01_topo.digging_table.rowCount()):
-            item = self.view_ksh_01_topo.digging_table.item(i, 0)
+        for i in range(self.view_ksh_02_digging.digging_table.rowCount()):
+            item = self.view_ksh_02_digging.digging_table.item(i, 0)
             item.setFlags(item.flags() ^ Qt.ItemIsEditable)
             
     # '파일'레이어 리스트를 지형 레이어 콤보박스에 밀어넣는 작업
@@ -459,8 +438,6 @@ class MainWindow(QMainWindow):
         # 중복을 제거하기 위한 보링점 집합
         unique_boring = set()
         
-        # 보링점 이름의 리스트
-        boring_name_list = []
 
         # 지정된 레이어의 모든 객체를 순회
         for entity in msp.query(f'*[layer=="{current_level_layer}"]'):
@@ -501,7 +478,6 @@ class MainWindow(QMainWindow):
 
                 insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,point_z)
                 unique_coordinates.add(insertion_point)
-
             # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
 
         # 보링점 찾아서 넣을것임
@@ -512,69 +488,42 @@ class MainWindow(QMainWindow):
                 start = entity.dxf.start
                 end = entity.dxf.end
                 nearest_text = find_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2)   
-                second_text = find_second_nearest_text(msp,(start.x + end.x) / 2,(start.y + end.y) / 2) 
                 point_z =0
-                point_name = ''
                 try:
                     point_z = float(nearest_text)
-                    point_name = second_text
-                except Exception as e:
-                    point_z = float(second_text)
-                    point_name = nearest_text
-                except Exception as e:
+                except:
                     point_z = (start.z+end.z)/2
-                    point_name = ''
                        
                 # 중심점 좌표 계산
                 center = ((start.x + end.x) / 2, (start.y + end.y) / 2, point_z)
                 unique_boring.add(center)
                 unique_coordinates.add(center)
-                boring_name_list.append(point_name)
-
 
             elif entity.dxftype() == 'POINT':
             # 점의 좌표 추출
                 nearest_text = find_nearest_text(msp,entity.dxf.location.x, entity.dxf.location.y)   
-                second_text = find_second_nearest_text(msp,entity.dxf.location.x, entity.dxf.location.y)
                 point_z =0
-                point_name = ''
                 try:
                     point_z = float(nearest_text)
-                    point_name = second_text
-                except Exception as e:
-                    point_z = float(second_text)
-                    point_name = nearest_text
                 except:
                     point_z = entity.dxf.location.z
-                    point_name = ''
-
-
                 point = (entity.dxf.location.x, entity.dxf.location.y, point_z)
                 unique_boring.add(point)
-                unique_coordinates.add(point)
-                boring_name_list.append(point_name)
+                unique_coordinates.add(center)
 
 
             elif entity.dxftype() == 'INSERT':
             # 삽입점 좌표 추출
                 nearest_text = find_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)   
-                second_text = find_second_nearest_text(msp,entity.dxf.insert.x, entity.dxf.insert.y)
                 point_z = 0
-                point_name = ''
                 try:
                     point_z = float(nearest_text)
-                    point_name = second_text
-                except Exception as e:
-                    point_z = float(second_text)
-                    point_name = nearest_text
                 except:
                     point_z = entity.dxf.insert.x
-                    point_name = ''
 
                 insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,point_z)
                 unique_boring.add(insertion_point)
-                unique_coordinates.add(insertion_point)
-                boring_name_list.append(point_name)
+                unique_coordinates.add(center)
 
             # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
 
@@ -584,13 +533,6 @@ class MainWindow(QMainWindow):
 
         print(top_coordinates_list)
         print(top_boring_list)
-
-        i = 0
-        for xyz in top_boring_list:
-
-            self.view_ksh_01_topo.addBoringPoint(boring_name_list[i],str(xyz[0]),str(xyz[1]),str(xyz[2]))
-            i = i+1
-
 
         
         
@@ -629,20 +571,14 @@ class MainWindow(QMainWindow):
 
     #--------
 
-     # 지층높이 결정 메소드
-    def action_generate_stratum(self):
 
-        for i in range(self.view_ksh_01_topo.tabs.count()):
-            print(self.view_ksh_01_topo.tabs.widget(i).children()[1].rowCount())
-            for j in range(self.view_ksh_01_topo.tabs.widget(i).children()[1].rowCount()):
-                try:
-                    print(self.view_ksh_01_topo.tabs.widget(i).children()[1].cellWidget(j,0).currentText())
-                except:
-                    print("-")
-                try:
-                    print(self.view_ksh_01_topo.tabs.widget(i).children()[1].cellWidget(j,1).currentText())
-                except:
-                    print(0)
+
+
+
+
+
+
+
 
 
 
