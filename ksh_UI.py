@@ -99,6 +99,11 @@ class MainWindow(QMainWindow):
 
         self.setStyleSheet("background-color: #ffffff;")        
         
+
+        
+
+
+
         # 위젯 생성--------------------------------------------------------------------------------------test
         
         
