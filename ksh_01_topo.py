@@ -64,8 +64,8 @@ class ksh_01_topo(QWidget):
         groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
 
         ## 버튼 생성 - 1
-        self.btn1 = CNV_Button('현황측량도 가져오기')
-        vbox.addWidget(self.btn1)
+        self.topo_file_import_btn = CNV_Button('현황측량도 가져오기')
+        vbox.addWidget(self.topo_file_import_btn)
         
         # 파일 경로 라벨 생성
         self.file_path_label_1 = CNV_Label("파일 경로:")
@@ -83,8 +83,8 @@ class ksh_01_topo(QWidget):
         # '지형'테이블 위젯 생성--------------------
         self.topo_table = CNV_TableWidget()
         self.topo_table.setColumnCount(2)
-        self.topo_table.setHorizontalHeaderItem(0, QTableWidgetItem("구분_"))
-        self.topo_table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택_"))
+        self.topo_table.setHorizontalHeaderItem(0, QTableWidgetItem("구분"))
+        self.topo_table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
             
         # 행의 헤더 숨기기
         header = self.topo_table.verticalHeader()

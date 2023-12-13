@@ -61,8 +61,8 @@ class ksh_03_material(QWidget):
         groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
         
         ## 버튼 생성 - 3
-        self.btn3 = CNV_Button('굴착계획평면도 가져오기')
-        vbox.addWidget(self.btn3)
+        self.material_file_import_btn = CNV_Button('굴착계획평면도 가져오기')
+        vbox.addWidget(self.material_file_import_btn)
         
         # 파일 경로 라벨 생성
         self.file_path_label_3 = CNV_Label("파일 경로:")
