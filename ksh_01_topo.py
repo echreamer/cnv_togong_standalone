@@ -67,6 +67,7 @@ class ksh_01_topo(QWidget):
         
         # 파일 경로 라벨 생성
         self.file_path_label_1 = CNV_Label("파일 경로:")
+        self.file_path_label_1.setWordWrap(True)
         vbox.addWidget(self.file_path_label_1)
         
         return groupbox
@@ -309,17 +310,17 @@ class ksh_01_topo(QWidget):
             for i in range(self.tabs.count()):
                 self.addCloseButton(i)
 
-if __name__ == '__main__':
-    app = 0
-    if QApplication.instance():
-        app = QApplication.instance()
-    else:
-        app = QApplication(sys.argv)
+# if __name__ == '__main__':
+#     app = 0
+#     if QApplication.instance():
+#         app = QApplication.instance()
+#     else:
+#         app = QApplication(sys.argv)
 
-    w = ksh_01_topo()
-    w.resize(600, 800)
-    filename = sys.argv[1]
-    if os.path.isfile(filename):
-        w.load_ifc_file(filename)
-        w.show()
-    sys.exit(app.exec_())
+#     w = ksh_01_topo()
+#     w.resize(600, 800)
+#     filename = sys.argv[1]
+#     if os.path.isfile(filename):
+#         w.load_ifc_file(filename)
+#         w.show()
+#     sys.exit(app.exec_())
