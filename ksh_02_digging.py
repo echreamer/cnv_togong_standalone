@@ -1,6 +1,5 @@
 import sys
 import os.path
-import cnv_methods as cnv
 try:
     from PyQt5.QtCore import *
     from PyQt5.QtGui import *
@@ -11,7 +10,6 @@ except Exception:
     from PySide2.QtWidgets import *
 
 import ifcopenshell
-from IFCCustomDelegate import *
 from ksh_style import *
 
 
@@ -53,8 +51,8 @@ class ksh_02_digging(QWidget):
         groupbox.setLayout(vbox)  # 그룹박스에 레이아웃 설정
         
         ## 버튼 생성 - 2
-        self.btn2 = CNV_Button('터파기파일 가져오기')
-        vbox.addWidget(self.btn2)
+        self.digging_file_import_btn = CNV_Button('터파기파일 가져오기')
+        vbox.addWidget(self.digging_file_import_btn)
         
         # 파일 경로 라벨 생성
         self.file_path_label_2 = CNV_Label("파일 경로:")
@@ -73,7 +71,7 @@ class ksh_02_digging(QWidget):
         self.digging_table = CNV_TableWidget()
         self.digging_table.setColumnCount(2)
 
-        self.digging_table.setHorizontalHeaderItem(0, QTableWidgetItem("터파기 구역"))
+        self.digging_table.setHorizontalHeaderItem(0, QTableWidgetItem("구분"))
         self.digging_table.setHorizontalHeaderItem(1, QTableWidgetItem("레이어선택"))
             
         # 행의 헤더 숨기기
