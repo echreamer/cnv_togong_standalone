@@ -104,14 +104,14 @@ class ksh_01_topo(QWidget):
         hbox1 = QHBoxLayout()
         vbox.addLayout(hbox1)
 
-        # 버튼 생성SS
+        # 버튼 생성
         self.boring_point_add_btn = CNV_Button('보링점 추가')
         self.boring_point_add_btn.clicked.connect(lambda: self.addBoringPoint("","","",""))        
         hbox1.addWidget(self.boring_point_add_btn)
         
         self.boring_point_delete_btn = CNV_Button('보링점 삭제')
-        self.boring_point_delete_btn.clicked.connect(lambda: self.deleteBoringPoint("","","",""))        
-        hbox1.addWidget(self.boring_point_add_btn)
+        self.boring_point_delete_btn.clicked.connect(lambda: self.deleteBoringPoint())        
+        hbox1.addWidget(self.boring_point_delete_btn)
         
         # 탭뷰 생성
         self.tabs = CNV_TabWidget()
@@ -204,6 +204,12 @@ class ksh_01_topo(QWidget):
         self.row_delete_btn = CNV_Button('행 삭제')
         self.row_delete_btn.clicked.connect(self.deleteRow)
         hbox_2.addWidget(self.row_delete_btn)
+            
+    def deleteBoringPoint(self):
+        current_index = self.tabs.currentIndex()  # 현재 선택된 탭의 인덱스 가져오기
+        if current_index != -1:  # 선택된 탭이 있을 경우
+            self.tabs.removeTab(current_index)             
+            
             
     def addRow(self):
         current_tab_index = self.tabs.currentIndex()

@@ -48,10 +48,9 @@ class ksh_03_material(QWidget):
         vbox_2.addWidget(self.Group4())
         vbox_2.addWidget(self.Group5())
         vbox_2.addWidget(self.Group6())
-
-
-
+        
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 
+    
     def Group1(self):
         groupbox = CNV_GroupBox()
         
@@ -64,6 +63,7 @@ class ksh_03_material(QWidget):
         
         # 파일 경로 라벨 생성
         self.file_path_label_3 = CNV_Label("파일 경로:")
+        self.file_path_label_3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         vbox.addWidget(self.file_path_label_3)
      
         
