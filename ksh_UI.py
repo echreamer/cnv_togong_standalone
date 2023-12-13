@@ -677,9 +677,9 @@ class MainWindow(QMainWindow):
     
     def action_save_click(self):
         print(self.project_folder_path + "constr_item_list.json")
-        cnv.save_json(self.constr_item_list, self.project_folder_path + "constr_item_list.json")
-        cnv.save_json(self.obj_constr_connect_list, self.project_folder_path + "obj_constr_connect_list.json")
-        cnv.save_json(self.obj_constr_quantity_list, self.project_folder_path + "obj_constr_quantity_list.json")
+        # cnv.save_json(self.constr_item_list, self.project_folder_path + "constr_item_list.json")
+        # cnv.save_json(self.obj_constr_connect_list, self.project_folder_path + "obj_constr_connect_list.json")
+        # cnv.save_json(self.obj_constr_quantity_list, self.project_folder_path + "obj_constr_quantity_list.json")
     
 
         
