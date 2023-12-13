@@ -1,14 +1,11 @@
 # import time
 import os.path
-from IFCCustomDelegate import *
 
 
 from ksh_01_topo import *
 from ksh_02_digging import *
 from ksh_03_material import *
 
-from IFCListingWidget import *
-import cnv_methods as cnv
 
 from os import environ
 
@@ -17,7 +14,6 @@ import ezdxf
 from ksh_style import *
 import sys
 import os.path
-import cnv_methods as cnv
 try:
     from PyQt5.QtCore import *
     from PyQt5.QtGui import *
@@ -27,7 +23,6 @@ except Exception:
     from PySide2.QtCore import *
     from PySide2.QtWidgets import *
 
-from IFCCustomDelegate import *
 from ksh_style import *
 
 from PyQt5.QtWidgets import QApplication, QComboBox, QPushButton, QVBoxLayout, QWidget
@@ -523,7 +518,7 @@ class MainWindow(QMainWindow):
 
                 insertion_point = (entity.dxf.insert.x, entity.dxf.insert.y,point_z)
                 unique_boring.add(insertion_point)
-                unique_coordinates.add(center)
+                unique_coordinates.add(insertion_point)
 
             # 여기에 다른 DXF 객체 타입에 대한 처리를 추가할 수 있습니다.
 

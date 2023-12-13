@@ -1,6 +1,5 @@
 import sys
 import os.path
-import cnv_methods as cnv
 try:
     from PyQt5.QtCore import *
     from PyQt5.QtGui import *
@@ -11,7 +10,6 @@ except Exception:
     from PySide2.QtWidgets import *
 
 import ifcopenshell
-from IFCCustomDelegate import *
 from ksh_style import *
 
 

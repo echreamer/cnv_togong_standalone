@@ -1,6 +1,5 @@
 import sys
 import os.path
-import cnv_methods as cnv
 try:
     from PyQt5.QtCore import *
     from PyQt5.QtGui import *
@@ -11,7 +10,6 @@ except Exception:
     from PySide2.QtWidgets import *
 
 import ifcopenshell
-from IFCCustomDelegate import *
 from ksh_style import *
 
 
@@ -103,32 +101,37 @@ class ksh_01_topo(QWidget):
         vbox = QVBoxLayout()
         groupbox3.setLayout(vbox)  # 그룹박스에 레이아웃 설정
 
+        hbox1 = QHBoxLayout()
+        vbox.addLayout(hbox1)
+
         # 버튼 생성SS
         self.boring_point_add_btn = CNV_Button('보링점 추가')
         self.boring_point_add_btn.clicked.connect(lambda: self.addBoringPoint("","","",""))        
-
-        # close_btn.clicked.connect(lambda _, idx=index: self.closeTab(idx))
-        vbox.addWidget(self.boring_point_add_btn)
+        hbox1.addWidget(self.boring_point_add_btn)
+        
+        self.boring_point_delete_btn = CNV_Button('보링점 삭제')
+        self.boring_point_delete_btn.clicked.connect(lambda: self.deleteBoringPoint("","","",""))        
+        hbox1.addWidget(self.boring_point_add_btn)
         
         # 탭뷰 생성
         self.tabs = CNV_TabWidget()
         vbox.addWidget(self.tabs)
         
-        hbox = QHBoxLayout()
-        vbox.addLayout(hbox)
+        hbox2 = QHBoxLayout()
+        vbox.addLayout(hbox2)
         
         # 체크박스(지층레벨 예측을 위한 알고리즘 선택)
         self.check_line = CNV_CheckBox("선형보간")
         self.check_line.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
-        hbox.addWidget(self.check_line)
+        hbox2.addWidget(self.check_line)
         
         self.check_spline = CNV_CheckBox("스플라인보간")
         self.check_spline.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
-        hbox.addWidget(self.check_spline)
+        hbox2.addWidget(self.check_spline)
         
         self.check_k = CNV_CheckBox("K-최근점이웃(KNN)")
         self.check_k.setChecked(False)  # 체크박스 초기에 선택안된 상태로 설정
-        hbox.addWidget(self.check_k)
+        hbox2.addWidget(self.check_k)
         
         return groupbox3
    
