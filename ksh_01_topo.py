@@ -25,33 +25,52 @@ class ksh_01_topo(QWidget):
         self.current_tab = None
         
     def initUI(self):
-        
-       
-        # 기본 폰트
-        #self.font = QFont()
-        #self.font.setBold(False)       # 굵게 설정            
-        #self.font.setFamily('맑은고딕')  # 원하는 폰트 패밀리로 변경
-        #self.font.setPointSize(int(self.width() / 70))  # 20은 크기 조절을 위한 임의의 비율 상수
 
-        # 수직 박스 레이아웃 생성
+
         vbox = QVBoxLayout()
         self.setLayout(vbox)
+        
+        top_group = CNV_Simple_GroupBox()
+        bottom_group = CNV_Simple_GroupBox()
 
-
-        # 그룹박스 생성
-        vbox.addWidget(self.Group1())
-        vbox.addWidget(self.Group2())
-       
+        
+        # top_group
+        vbox1 = QVBoxLayout()
+        vbox1.addWidget(self.Group1())
+        vbox1.addWidget(self.Group2())
+        
         # 버튼 생성
         self.topo_btn = CNV_Button('현황 지형 작성')
-        vbox.addWidget(self.topo_btn)
+        vbox1.addWidget(self.topo_btn)
         
-        vbox.addWidget(self.Group3())
+        top_group.setLayout(vbox1)
+
+        # bottom_group
+        vbox2 = QVBoxLayout()
+        vbox2.addWidget(self.Group3())
         
         # 버튼 생성
         self.stratum_btn = CNV_Button('지층 생성')
-        self.stratum_btn.clicked.connect(self.addBoringPoint)        
-        vbox.addWidget(self.stratum_btn)
+        self.stratum_btn.clicked.connect(self.addBoringPoint)     
+        vbox2.addWidget(self.stratum_btn)
+        
+        bottom_group.setLayout(vbox2)
+
+        # 수평 스플리터 추가
+        splitter = CNV_Splitter()
+        splitter.setOrientation(0)  # 수평 방향으로 설정
+        splitter.addWidget(top_group)
+        splitter.addWidget(bottom_group)
+        
+        # top_group과 bottom_group의 비율을 1:1로 유지하기 위해 크기를 설정합니다.
+        initial_size = splitter.size().height() // 2  # 스플리터의 높이의 반을 각 위젯에 할당
+        splitter.setSizes([initial_size, initial_size])        
+        
+        vbox.addWidget(splitter)
+        
+
+
+        
         
         
     #그룹박스 - 파일 불러오기 박스 ------------------------------------------------------------------ 

@@ -21,15 +21,21 @@ class ksh_03_material(QWidget):
         self.initUI()  # initUI 메서드 호출
     def initUI(self):
 
-        vbox = QVBoxLayout()
-        self.setLayout(vbox)
+        vbox_1 = QVBoxLayout()
+        self.setLayout(vbox_1)
+
+        group = CNV_Simple_GroupBox()
+        vbox_1.addWidget(group)
+        
+        vbox_2 = QVBoxLayout()
+        group.setLayout(vbox_2)
 
         hbox = QHBoxLayout()
-        vbox.addLayout(hbox)
+        vbox_2.addLayout(hbox)
        
         # 버튼 생성
         self.material_btn = CNV_Button('부재 작성')
-        vbox.addWidget(self.material_btn)
+        vbox_2.addWidget(self.material_btn)
         
         
         ## 레이아웃 - 왼쪽 ----------------------------------------------------------------------------------

@@ -1,38 +1,35 @@
-from PyQt5.QtWidgets import QApplication, QComboBox, QPushButton, QTableWidgetItem, QTableWidget, QVBoxLayout, QWidget
 import sys
-
-def on_button_click():
-    selected_items = []
-    for row in range(table.rowCount()):
-        for col in range(table.columnCount()):
-            item = table.cellWidget(row, col)  # 셀의 위젯(콤보박스) 가져오기
-            if isinstance(item, QComboBox):
-                selected_item = item.currentText()  # 현재 선택된 아이템 가져오기
-                selected_items.append(selected_item)
-
-    print(f"Selected items: {selected_items}")
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QGroupBox, QHBoxLayout, QSplitter, QLabel
 
 app = QApplication(sys.argv)
-
 window = QWidget()
-layout = QVBoxLayout()
+window.setWindowTitle('Horizontal Splitter Example')
+window.setGeometry(100, 100, 400, 300)
 
-table = QTableWidget()
-table.setRowCount(2)
-table.setColumnCount(2)
+vbox = QVBoxLayout()
+group1 = QGroupBox('Group 1')
+group2 = QGroupBox('Group 2')
 
-for i in range(table.rowCount()):
-    for j in range(table.columnCount()):
-        combo = QComboBox()
-        combo.addItems(["Option 1", "Option 2", "Option 3"])
-        table.setCellWidget(i, j, combo)
+# 수평 레이아웃과 라벨 추가
+vbox1 = QVBoxLayout()
+label1 = QLabel('Content for Group 1')
+vbox1.addWidget(label1)
+group1.setLayout(vbox1)
 
-button = QPushButton("Extract Selected Items")
-button.clicked.connect(on_button_click)
+vbox2 = QVBoxLayout()
+label2 = QLabel('Content for Group 2')
+vbox2.addWidget(label2)
+group2.setLayout(vbox2)
 
-layout.addWidget(table)
-layout.addWidget(button)
-window.setLayout(layout)
+# 수평 스플리터 추가
+splitter = QSplitter()
+splitter.setOrientation(0)  # 수평 방향으로 설정
+splitter.addWidget(group1)
+splitter.addWidget(group2)
+splitter.setSizes([150, 150])  # 각 그룹의 초기 크기 설정
+
+vbox.addWidget(splitter)
+window.setLayout(vbox)
 window.show()
 
 sys.exit(app.exec_())
