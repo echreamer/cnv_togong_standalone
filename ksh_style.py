@@ -174,6 +174,19 @@ class CNV_GroupBox(QGroupBox):
             }
         """)
         
+# 심플__그룹박스 ----------------------------------------------------------------------------------------------------------------------
+      
+class CNV_Simple_GroupBox(QGroupBox):
+    def __init__(self, title='', parent=None):
+        super().__init__(title, parent)
+        self.setStyleSheet("""
+            QGroupBox {
+                border: none;
+                margin: 0px;
+                padding: 0px;
+            }
+        """)
+        
 # 버튼 ----------------------------------------------------------------------------------------------------------------------
       
 class CNV_Button(QPushButton):
@@ -340,7 +353,36 @@ class CNV_TabWidget(QTabWidget):
         font.setPointSize(10)  # 20은 크기 조절을 위한 임의의 비율 상수
         self.setFont(font)
         
+# 스플리터 ----------------------------------------------------------------------------------------
 
+
+class CNV_Splitter(QSplitter):
+    def __init__(self, orientation=Qt.Horizontal):
+        super().__init__(orientation)
+        self.initUI()
+
+    def initUI(self):
+        # 스플리터에 적용할 스타일 설정
+        style = """
+            QSplitter::handle {
+                background-color: #D1E0FB;  /* 스플리터 핸들의 배경색 */
+            }
+            QSplitter::handle:horizontal {
+                width: 1px;  /* 수평 스플리터의 너비 */
+            }
+            QSplitter::handle:vertical {
+                height: 1px;  /* 수직 스플리터의 높이 */
+            }
+            QSplitter::handle:hover {
+                background-color: #2A384C;  /* 핸들에 호버링 효과를 줄 배경색 */
+            }
+            QSplitter::handle:pressed {
+                background-color: #2A384C;  /* 핸들을 눌렀을 때의 배경색 */
+            }
+        """
+        self.setStyleSheet(style)
+        
+        
 def main():
     app = QApplication([])
 
